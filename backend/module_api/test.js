@@ -1,48 +1,62 @@
 const { spawn } = require('child_process');
 
-let ssh;
+let sshProcess;
 let output = '';
 
 function connectSSH() {
-    ssh = spawn('sshpass', ['-pPleaseChangeTheAdminPassword', 'ssh', '-L', '2222:localhost:22','admin@172.16.17.32']);
+    const command = 'sshpass -p PleaseChangeTheAdminPassword ssh -T -L 2222:localhost:22 admin@172.16.17.32';
 
-    ssh.stdout.on('data', (data) => {
-        console.log(`Output:\n${data}`);
-        output += data.toString();
+    sshProcess = spawn(command, {
+        shell: true,
+        stdio: ['pipe', 'pipe', 'pipe']
     });
 
-    ssh.stderr.on('data', (data) => {
+    sshProcess.stdout.once('data', (data) => {
+        output += data.toString();
+        console.log('Current output:', output);
+    });
+
+    sshProcess.stderr.on('data', (data) => {
         console.error(`Error:\n${data}`);
     });
 
-    ssh.on('close', (code) => {
+    sshProcess.on('close', (code) => {
         console.log(`Child process exited with code ${code}`);
     });
 }
 
 function sendCommand(command) {
-    if (!ssh) {
+    if (!sshProcess) {
         console.error('SSH connection is not established');
-        return;
+        return Promise.reject('SSH connection is not established');
     }
-    ssh.stdin.write(command + '\n');
+    
+    return new Promise((resolve, reject) => {
+        output = ''; // Очищаем вывод перед отправкой новой команды
+
+        sshProcess.stdin.write(command + '\n');
+
+        sshProcess.stdout.once('data', (data) => {
+            output += data.toString();
+            console.log('Current output:', output);
+            resolve(output);
+        });
+
+        sshProcess.stderr.once('data', (data) => {
+            console.error(`Error:\n${data}`);
+            reject(data);
+        });
+    });
 }
 
 function getOutput() {
     let toOut = output;
-    output = '';
+    output = ''; // Очищаем вывод после получения результата
     return toOut;
 }
-// connectSSH();
-
-// sendCommand('show version');
-// sendCommand('exit')
 
 module.exports = {
     connectSSH,
     sendCommand,
     getOutput
-}
-
-//sshpass -pPleaseChangeTheAdminPassword ssh -L 3000:localhost:22 admin@172.16.17.32
-//('sshpass', ['-pPleaseChangeTheAdminPassword', 'ssh', '-L', '3000:localhost:22','admin@172.16.17.32', command])
+};
