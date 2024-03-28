@@ -5,7 +5,7 @@ const connectButton = document.querySelector('#connectButton');
 
 function connect() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/connect', true);
+    xhr.open('GET', '/bert/connect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -27,7 +27,7 @@ function connect() {
 
 function disconnect() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/disconnect', true);
+    xhr.open('GET', '/bert/disconnect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -61,7 +61,7 @@ function sendCommandToBackend() {
     const command = inputField.value;
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/process', true);
+    xhr.open('POST', '/bert/process', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {

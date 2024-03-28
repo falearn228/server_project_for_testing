@@ -11,6 +11,7 @@ body {
 
 .container {
     display: none;
+    flex-direction: column;
     text-align: center;
     background-color: white;
     padding: 30px;
