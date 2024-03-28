@@ -28,3 +28,24 @@ session.get([oid], function (error, varbinds) {
   
   session.close();
 });
+
+var MyVarbinds = [
+  {
+      oid: "1.3.6.1.4.1.19707.7.7.1.4.18.0",
+      type: snmp.ObjectType.Integer32,
+      value: 1
+  }
+];
+
+session.set (MyVarbinds, function (error, varbinds) {//maybe dont work
+  if (error) {
+      console.error (error.toString ());
+  } else {
+      for (var i = 0; i < MyVarbinds.length; i++) {
+          if (snmp.isVarbindError (MyVarbinds[i]))
+              console.error (snmp.varbindError (MyVarbinds[i]));
+          else
+              console.log (MyVarbinds[i].oid + "|" + MyVarbinds[i].value);
+      }
+  }
+});
