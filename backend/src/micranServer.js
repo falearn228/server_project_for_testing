@@ -2,9 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const MyModule = require('../module_api/MyModule');
 const berkutModule = require('../module_api/test');
-//const snmpModule = require('../module_api/ModuleForSMNPConnection');
+const snmpModule = require('../module_api/ModuleForSMNPConnection');
 const path = require('path');
-const { exit } = require('process');
 
 const app = express();
 const port = 3000;
@@ -16,17 +15,28 @@ app.use(express.static('/fontend/public'));
 
 // начало SNMP модуль
 
+app.post('/snmp/process', (req, res) =>{
+  const [freq, mode, width] = req.body;
+  console.log(mode.oid, mode.value);
+  snmpModule.getOid(mode.oid);
+  snmpModule.setOid(mode.oid, parseInt(mode.value));
+  //snmpModule.setMode();
+  snmpModule.getOid(mode.oid);
+});
+
 app.get("/snmp", (req, res) =>{
-  res.sendFile("/Telemetry.html", {root: path.join(frontPath, 'public')});
+  res.sendFile("/StationTest.html", {root: path.join(frontPath, 'public')});
 });
 
-app.get("/styles.css", (req, res) =>{
-res.sendFile("/styles.css", {root: path.join(frontPath, 'styles')});
+app.get("/StationStyles.css", (req, res) =>{
+  res.sendFile("/StationStyles.css", {root: path.join(frontPath, 'styles')});
 });
 
-app.get("/script.js", (req, res) =>{
-res.sendFile("/script.js", {root: path.join(frontPath, 'src')});
+app.get("/StationScript.js", (req, res) =>{
+  res.sendFile("/StationScript.js", {root: path.join(frontPath, 'src')});
 });
+
+
 // Конец SNMP модуля
 
 // Начало беркут модуль

@@ -3,41 +3,42 @@ const snmp = require('net-snmp');
 // Настройки для подключения к устройству
 const options = {
   host: '172.16.17.220',
+  community: 'public',
 };
 
-var MyVarbind= //example of structre
-{
+var varbinds= //example of structre
+[{
     oid: "",
-    type: snmp.ObjectType.Integer32,
+    type: snmp.ObjectType.Integer,
     value: 0
-};
+}];
 
-function oidMaker(whatOid,Value)
+function oidMaker(whatOid, Value)
 {
   switch(whatOid)
   {
     case "Frequncy":
     {
-      MyVarbind.oid=""
-      MyVarbind.value=Value
+      varbinds[0].oid="1.3.6.1.4.1.19707.7.7.2.1.4.58.0"
+      varbinds[0].value=Value
       break
     }
     case "Width":
     {
-      MyVarbind.oid=""
-      MyVarbind.value=Value
+      varbinds[0].oid="1.3.6.1.4.1.19707.7.7.2.1.4.56.0"
+      varbinds[0].value=Value
       break
     }
-    case "mode":
+    case "Mode":
     {
-      MyVarbind.oid="1.3.6.1.4.1.19707.7.7.2.1.4.18.0"
-      MyVarbind.value=Value
+      varbinds[0].oid="1.3.6.1.4.1.19707.7.7.2.1.4.18.0"
+      varbinds[0].value=Value
       break
     }
     default:
     {
-      MyVarbind.oid=""
-      MyVarbind.value=0
+      varbinds.oid=""
+      varbinds.value=0
     }
   }
 }
@@ -45,45 +46,45 @@ function oidMaker(whatOid,Value)
 function setOid(oidToSet, value)
 {
   oidMaker(oidToSet, value)
-  if(MyVarbind.oid=="")
+  if(varbinds.oid=="")
   {
     return "Can't set oid. Invalid Oid";
   }
     
-  const session = snmp.createSession(options.host);
+  const session = snmp.createSession(options.host, options.community);
 
-  session.set (MyVarbind, function (error, varbinds) {
-    if (error) 
-    {
-        console.error (error.toString ());
-    }
-    else
-    {
-      if (snmp.isVarbindError (MyVarbind))
-          console.error (snmp.varbindError (MyVarbind));
-      else
-          console.log (MyVarbind.oid + "|" + MyVarbind.value);
+  session.set(varbinds, function (error, varbinds) {
+    if (error) {
+        console.error(error.toString());
+    } else {
+        // Проверяем, были ли переменные установлены успешно
+        for (let i = 0; i < varbinds.length; i++) {
+            if (snmp.isVarbindError(varbinds[i]))
+                console.error(snmp.varbindError(varbinds[i]));
+            else
+                console.log("Установлено: " + varbinds[i].oid + " = " + varbinds[i].value);
+        }
     }
     
     session.close();
   });
 }
 
-function getOid(oid)//maybe We need to change it// What if we will need to set many oid in one time
+function getOid(whatOid)//maybe We need to change it// What if we will need to set many oid in one time
 {
   switch(whatOid)
   {
     case "Frequncy":
     {
-      oid=""
+      oid="1.3.6.1.4.1.19707.7.7.2.1.4.58.0"
       break
     }
     case "Width":
     {
-      oid=""
+      oid="1.3.6.1.4.1.19707.7.7.2.1.4.56.0"
       break
     }
-    case "mode":
+    case "Mode":
     {
       oid="1.3.6.1.4.1.19707.7.7.2.1.4.18.0"
       break
@@ -93,7 +94,7 @@ function getOid(oid)//maybe We need to change it// What if we will need to set m
       return "Can't get oid. Invalid OID"
     }
   }
-  const session = snmp.createSession(options.host);
+  const session = snmp.createSession(options.host, options.community);
 
   session.get([oid], function (error, varbinds) {
     if (error) {
@@ -106,7 +107,7 @@ function getOid(oid)//maybe We need to change it// What if we will need to set m
           console.log('OID:', varbind.oid);
           console.log('Значение:', varbind.value.toString());
           session.close(); 
-          return arbind.value.toString();
+          return varbind.value.toString();
         }
       }
     }
@@ -114,6 +115,8 @@ function getOid(oid)//maybe We need to change it// What if we will need to set m
     return "";
   });
 }
+
+
 module.exports = {
   setOid,
   getOid

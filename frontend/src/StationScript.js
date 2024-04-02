@@ -17,31 +17,28 @@ function sendCommandToBackend() {
     const bandwidth = selectedBandwidth.value;
     let InputedParams = [
         {
-            oid: "1.3.6.1.4.1.19707.7.7.2.1.4.18.0",
-            type: "SemicolonPreference.ObjectType.Integer32",
+            oid: "Frequncy",
             value: frequency
         },
         {
-            oid: "1.3.6.1.4.1.19707.7.7.2.1.4.18.0",
-            type: "SemicolonPreference.ObjectType.Integer32",
+            oid: "Mode",
             value: regime
         },
         {
-            oid: "1.3.6.1.4.1.19707.7.7.2.1.4.18.0",
-            type: "SemicolonPreference.ObjectType.Integer32",
+            oid: "Width",
             value: bandwidth
         }
     ]
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/process', true);
+    xhr.open('POST', '/snmp/process', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
         if (xhr.status === 200) {
             console.log(xhr.response);
             const responseBlock = document.getElementById("responseBlock");
-            responseBlock.innerText = "Установленная частота: " + frequency + " MHz"
+            responseBlock.innerText = "Установленная частота: " + frequency + " KHz"
             + "\nУстановленный режим работы: " + regime + "\nУстановленная ширина полосы: " + bandwidth;
         } else if (xhr.status >= 400) {
             console.error("Ошибка запроса: ", xhr.status);

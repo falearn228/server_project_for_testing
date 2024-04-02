@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Установка параметров станции связи</title> 
-    <link rel="stylesheet" href="./StationStyles.css" type="text/css">
+    <link rel="stylesheet" href="/StationStyles.css" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> 
     </head> 
 <body> 
@@ -15,14 +15,14 @@
 
         <label for="selectionRegime">Выберите режим работы
             <select id="selectionRegime">
-                <option value="base">База</option>
-                <option value="abonent">Абонент</option>
+                <option value="1">База</option>
+                <option value="0">Абонент</option>
             </select>
         </label>
         <label for="selectionBandwidth">Выберите ширину полосы
             <select id="selectionBandwidth">
-                <option value="10">10 MHz</option>
-                <option value="20">20 MHz</option>
+                <option value="3">10 MHz</option>
+                <option value="5">20 MHz</option>
             </select>
         </label>
         <div class="buttons">
@@ -30,6 +30,6 @@
         </div>
         <pre id="responseBlock">Вывод</pre>
     </div>
-    <script type="text/javascript" src="/StationScript.js"></script> 
+    <script type="text/javascript" src="./StationScript.js"></script> 
 </body>
 </html>
