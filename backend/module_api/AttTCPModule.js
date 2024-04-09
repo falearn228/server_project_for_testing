@@ -11,7 +11,7 @@ const client = new net.Socket();
 client.connect(PORT, HOST, function() {
     console.log('Успешное подключение к устройству');
     // Отправляем запрос *IDN? на устройство
-    client.write(':SYSTem:CONFig:IP?\n');
+    client.write(':INP:ATT?\n');
 });
 
 // Обработчик события при получении данных от устройства
