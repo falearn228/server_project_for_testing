@@ -6,10 +6,8 @@ const port = new serialPort( {
     baudRate: 115200,
 })
 
-port.write('INP:ATT 80\n')
-
-port.write('INP:ATT?\n')
-
+port.write('SYST:CONF:IP 172.16.17.56\n')
+port.write('SYST:CONF:IP?\n')
 port.on('data', function (data) {
     console.log('Data:', parseInt(data))
 })
