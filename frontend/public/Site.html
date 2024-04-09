@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Мой сайт</title>
+  <link rel="stylesheet" type="text/css" href="Site_styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="18c04e70df67915d324cd6e02dac19c0.png" alt="Логотип">
+    </div>
+  </header>
+  <hr>
+  <div class="sidebar">
+    <ul>
+      <li><a href="#" onclick="openBercut()">Беркут</a></li>
+      <li><a href="#" onclick="openAtt()">Аттенюатор</a></li>
+      <li><a href="#" onclick="openStat1()">Станция №1</a></li>
+      <li><a href="#" onclick="openStat2()">Станция №2</a></li>
+    </ul>
+  </div>
+  <div class="content">
+    <pre id="responseBlock">Вывод беркута:</pre>
+  </div>
+
+  <div id="Bercut" class="Bercut">
+    <div class="Bercut-content">
+      <span class="close" onclick="closeBercut()">&times;</span>
+      <h2>Введите данные</h2>
+      <form>
+        <label for="inputField">Команда:</label>
+        <input type="text" id="inputField"><br>
+        <div class="buttons-wrap">
+          <button class="btn_connection" id="connectButton" onclick="connect()">Connect</button>
+          <button class="btn" class="pressButton" id="pressButton" onclick="sendCommandToBackend(); closeBercut();">Отправить</button>
+          <button class="btn_connection btn-red" id="disconnectButton" onclick="disconnect()">Disconnect</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="Att" class="Bercut">
+    <div class="Bercut-content">
+      <span class="close" onclick="closeAtt()">&times;</span>
+      <h2>Введите данные</h2>
+      <form>
+        <label for="inputAtt">Ослабление:</label>
+        <input type="text" id="inputAtt"><br>
+        <button class="btn" class="pressButton" id="ExecuteAtt" onclick="sendAtt(); closeAtt();">Отправить</button>
+      </form>
+    </div>
+  </div>
+    <div id="Stat1" class="Bercut">
+    <div class="Bercut-content">
+      <span class="close" onclick="closeStat1()">&times;</span>
+      <h2>Введите данные</h2>
+      <form>
+        <label for="inputFrequency1">Частота станции</label>
+        <input type="text" id="inputFrequency1" placeholder="Введите частоту станции" autofocus>
+        <label for="selectionRegime1">Выберите режим работы
+            <select id="selectionRegime1">
+                <option value="1">База</option>
+                <option value="0">Абонент</option>
+            </select>
+        </label>
+        <label for="selectionBandwidth1">Выберите ширину полосы
+            <select id="selectionBandwidth1">
+                <option value="3">10 MHz</option>
+                <option value="5">20 MHz</option>
+            </select>
+        </label>
+        <button class="btn" class="pressButton" id="ExecuteStat1" onclick="sendStat1(); closeStat1();">Отправить</button>
+      </form>
+    </div>
+  </div>
+    <div id="Stat2" class="Bercut">
+    <div class="Bercut-content">
+      <span class="close" onclick="closeStat2()">&times;</span>
+      <h2>Введите данные</h2>
+      <form>
+        <label for="inputFrequency2">Частота станции</label>
+        <input type="text" id="inputFrequency2" placeholder="Введите частоту станции" autofocus>
+        <label for="selectionRegime2">Выберите режим работы
+            <select id="selectionRegime2">
+                <option value="1">База</option>
+                <option value="0">Абонент</option>
+            </select>
+        </label>
+        <label for="selectionBandwidth2">Выберите ширину полосы
+            <select id="selectionBandwidth2">
+                <option value="3">10 MHz</option>
+                <option value="5">20 MHz</option>
+            </select>
+        </label>
+        <button class="btn" class="pressButton" id="ExecuteStat2" onclick="sendStat2(); closeStat2();">Отправить</button>
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript" src="Site_script.js"></script>
+</body>
+</html>
