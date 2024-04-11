@@ -11,6 +11,7 @@ function closeModalID(ModalID) {
  const disconnectButton = document.getElementById('disconnectButton');
  const connectButton = document.getElementById('connectButton');
  const pressButton_display = document.getElementById("pressButton");
+
 function connect() {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', '/bert/connect', true);
