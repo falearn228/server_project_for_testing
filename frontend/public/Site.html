@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <title>Мой сайт</title>
   <link rel="stylesheet" type="text/css" href="Site_styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Тестирование связи между устройствами">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
@@ -12,87 +15,110 @@
     </div>
   </header>
   <hr>
-  <div class="sidebar">
+  <nav class="sidebar">
     <ul>
-      <li><a href="#" onclick="openBercut()">Беркут</a></li>
-      <li><a href="#" onclick="openAtt()">Аттенюатор</a></li>
-      <li><a href="#" onclick="openStat1()">Станция №1</a></li>
-      <li><a href="#" onclick="openStat2()">Станция №2</a></li>
+      <li><a href="#" onclick="openModalID('Bercut')">Беркут</a></li>
+      <li><a href="#" onclick="openModalID('Att')">Аттенюатор</a></li>
+      <li><a href="#" onclick="openModalID('Stat1')">Станция №1</a></li>
+      <li><a href="#" onclick="openModalID('Stat2')">Станция №2</a></li>
+      <li><a href="#" onclick="openModalID('M3M')">M3M</a></li>
     </ul>
-  </div>
+  </nav>
   <div class="content">
     <pre id="responseBlock">Вывод беркута:</pre>
   </div>
 
   <div id="Bercut" class="Bercut">
     <div class="Bercut-content">
-      <span class="close" onclick="closeBercut()">&times;</span>
+      <span class="close" onclick="closeModalID('Bercut')">&times;</span>
       <h2>Введите данные</h2>
       <form>
         <label for="inputField">Команда:</label>
         <input type="text" id="inputField"><br>
         <div class="buttons-wrap">
-          <button class="btn_connection" id="connectButton" onclick="connect()">Connect</button>
-          <button class="btn" class="pressButton" id="pressButton" onclick="sendCommandToBackend(); closeBercut();">Отправить</button>
-          <button class="btn_connection btn-red" id="disconnectButton" onclick="disconnect()">Disconnect</button>
+          <button type="button" class="btn btn-primary" id="connectButton" onclick="connect()">Подключиться</button>
+          <button type="button" class="btn btn-success" class="pressButton" id="pressButton" onclick="sendCommandToBackend(); closeModalID('Bercut');">Отправить</button>
+          <button type="button" class="btn btn-danger" id="disconnectButton" onclick="disconnect()">Отключиться</button>
         </div>
       </form>
     </div>
   </div>
   <div id="Att" class="Bercut">
     <div class="Bercut-content">
-      <span class="close" onclick="closeAtt()">&times;</span>
+      <span class="close" onclick="closeModalID('Att')">&times;</span>
       <h2>Введите данные</h2>
       <form>
         <label for="inputAtt">Ослабление:</label>
         <input type="text" id="inputAtt"><br>
-        <button class="btn" class="pressButton" id="ExecuteAtt" onclick="sendAtt(); closeAtt();">Отправить</button>
+        <button type="button" class="btn btn-success pressButton" id="ExecuteAtt" onclick="sendAtt(); closeModalID('Att');">Отправить</button>
       </form>
     </div>
   </div>
     <div id="Stat1" class="Bercut">
     <div class="Bercut-content">
-      <span class="close" onclick="closeStat1()">&times;</span>
+      <span class="close" onclick="closeModalID('Stat1')">&times;</span>
       <h2>Введите данные</h2>
       <form>
-        <label for="inputFrequency1">Частота станции</label>
-        <input type="text" id="inputFrequency1" placeholder="Введите частоту станции" autofocus>
-        <label for="selectionRegime1">Выберите режим работы
-            <select id="selectionRegime1">
-                <option value="1">База</option>
-                <option value="0">Абонент</option>
-            </select>
-        </label>
-        <label for="selectionBandwidth1">Выберите ширину полосы
-            <select id="selectionBandwidth1">
-                <option value="3">10 MHz</option>
-                <option value="5">20 MHz</option>
-            </select>
-        </label>
-        <button class="btn" class="pressButton" id="ExecuteStat1" onclick="sendStat1(); closeStat1();">Отправить</button>
+        <div class="form-group">
+          <label for="inputFrequency1">Частота станции, МГц</label>
+          <input type="text" id="inputFrequency1" placeholder="Например, 6000" autofocus>
+        </div>
+        <div class="form-group">
+          <label for="selectionRegime1">Выберите режим работы
+              <select id="selectionRegime1">
+                  <option value="1">База</option>
+                  <option value="0">Абонент</option>
+              </select>
+          </label>
+        </div>
+        <div class="form-group">
+          <label for="selectionBandwidth1">Выберите ширину полосы
+              <select id="selectionBandwidth1">
+                  <option value="3">10 МГц</option>
+                  <option value="5">20 МГц</option>
+              </select>
+          </label>
+        </div>
+          <button type="button" class="btn btn-success pressButton" id="ExecuteStat1" onclick="sendStat1(); closeModalID('Stat1');">Отправить</button>
       </form>
     </div>
   </div>
     <div id="Stat2" class="Bercut">
     <div class="Bercut-content">
-      <span class="close" onclick="closeStat2()">&times;</span>
+      <span class="close" onclick="closeModalID('Stat2')">&times;</span>
       <h2>Введите данные</h2>
       <form>
-        <label for="inputFrequency2">Частота станции</label>
-        <input type="text" id="inputFrequency2" placeholder="Введите частоту станции" autofocus>
-        <label for="selectionRegime2">Выберите режим работы
-            <select id="selectionRegime2">
-                <option value="1">База</option>
-                <option value="0">Абонент</option>
-            </select>
-        </label>
-        <label for="selectionBandwidth2">Выберите ширину полосы
-            <select id="selectionBandwidth2">
-                <option value="3">10 MHz</option>
-                <option value="5">20 MHz</option>
-            </select>
-        </label>
-        <button class="btn" class="pressButton" id="ExecuteStat2" onclick="sendStat2(); closeStat2();">Отправить</button>
+        <div class="form-group">
+          <label for="inputFrequency2">Частота станции, МГц</label>
+          <input type="text" id="inputFrequency2" placeholder="Например, 6000" autofocus>
+        </div>
+        <div class="form-group">
+          <label for="selectionRegime2">Выберите режим работы
+              <select id="selectionRegime2">
+                  <option value="1">База</option>
+                  <option value="0">Абонент</option>
+              </select>
+          </label>
+        </div>
+        <div class="form-group">
+          <label for="selectionBandwidth2">Выберите ширину полосы
+              <select id="selectionBandwidth2">
+                  <option value="3">10 МГц</option>
+                  <option value="5">20 МГц</option>
+              </select>
+          </label>
+        </div>
+        <button type="button" class="btn btn-success pressButton" id="ExecuteStat2" onclick="sendStat2(); closeModalID('Stat2');">Отправить</button>
+      </form>
+    </div>
+  </div>
+  <div id="M3M" class="Bercut">
+    <div class="Bercut-content">
+      <span class="close" onclick="closeModalID('M3M')">&times;</span>
+      <h2>Введите данные</h2>
+      <form>
+        <p>Значение: <span id="outputPowerValue"></span></p>
+        <button type="button" class="btn btn-primary pressButton" id="viewOutputPower" onclick="getOutputPower();">Просмотр</button>
       </form>
     </div>
   </div>
