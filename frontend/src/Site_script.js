@@ -1,36 +1,12 @@
-function openBercut() {
-  document.getElementById("Bercut").style.display = "block";
+function openModalID(ModalID) {
+  document.getElementById(ModalID).style.display = "block";
 }
 
-function closeBercut() {
-  document.getElementById("Bercut").style.display = "none";
+function closeModalID(ModalID) {
+  document.getElementById(ModalID).style.display = "none";
 }
 
-function openAtt() {
-  document.getElementById("Att").style.display = "block";
-}
-
-function closeAtt() {
-  document.getElementById("Att").style.display = "none";
-}
-
-function openStat1() {
-  document.getElementById("Stat1").style.display = "block";
-}
-
-function closeStat1() {
-  document.getElementById("Stat1").style.display = "none";
-}
-
-function openStat2() {
-  document.getElementById("Stat2").style.display = "block";
-}
-
-function closeStat2() {
-  document.getElementById("Stat2").style.display = "none";
-}
-
- const inputField = document.getElementById('inputField'); 
+ let inputField = document.getElementById('inputField'); 
  const pressButton = document.getElementById('pressButton');
  const disconnectButton = document.getElementById('disconnectButton');
  const connectButton = document.getElementById('connectButton');
@@ -209,4 +185,26 @@ function sendAtt() {
     };
 
     xhr.send(JSON.stringify(Att));
+}
+
+function getOutputPower() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', '/M3M/output-power', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.response);
+      const outputPowerValue = document.getElementById('outputPowerValue');
+      outputPowerValue.textContent = response.value + " дБ";
+    } else {
+      console.error('Ошибка получения значения мощности:', xhr.status);
+    }
+  };
+
+  xhr.onerror = function() {
+    console.error('Ошибка получения значения мощности:', xhr.status);
+  };
+
+  xhr.send();
 }
