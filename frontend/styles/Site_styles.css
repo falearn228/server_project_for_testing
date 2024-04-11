@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 header {
@@ -9,19 +9,50 @@ header {
   padding: 6px;
 }
 
-#connectButton {
-    display: flex;
-    font-size: 25px;
-    background-color: blue;
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-#connectButton:hover {
-    background-color: #45a049;
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: #fff;
+  font-size: 18px;
+  padding: 12px 24px;
+}
+
+.btn-success:hover {
+  background-color: #1e7e34;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #a71d2a;
 }
 
 #disconnectButton {
     display: none;
-    background-color: red;
 }
 
 #pressButton {
@@ -62,7 +93,7 @@ header {
   left: 0;
   top: 70px;
   bottom: 0;
-  padding: 20px;
+  padding: 1.25rem;
 }
 
 .sidebar a {
@@ -93,11 +124,7 @@ header {
   width: 60%;
 }
 
-.send {
-    margin-top: 10px;
-}
-
-.close {
+.Bercut-content .close {
   color: #aaa;
   float: right;
   font-size: 28px;
@@ -133,4 +160,14 @@ header {
 .content {
   margin-left: 12%;
   padding: 20px;
+}
+
+#outputPowerValue {
+  font-weight: bold;
+  font-size: 18px;
+  color: #007bff;
+}
+
+#viewOutputPower {
+  padding: 10px;
 }
