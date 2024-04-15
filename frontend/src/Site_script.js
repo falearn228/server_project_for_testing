@@ -14,7 +14,7 @@ function closeModalID(ModalID) {
 
 function connect() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/bert/connect', true);
+    xhr.open('GET', '/site/bert/connect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -37,7 +37,7 @@ function connect() {
 
 function disconnect() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/bert/disconnect', true);
+    xhr.open('GET', '/site/bert/disconnect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -62,7 +62,7 @@ function sendCommandToBackend() {
     const command = inputField.value;
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/bert/process', true);
+    xhr.open('POST', '/site/bert/process', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -106,7 +106,7 @@ function sendStat1() {
     ]
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/snmp/process', true);
+    xhr.open('POST', '/site/snmp/process', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -147,7 +147,7 @@ function sendStat2() {
     ]
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/snmp/process', true);
+    xhr.open('POST', '/site/snmp/process', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -170,7 +170,7 @@ function sendAtt() {
     let Att = inputAtt.value;
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/att', true);
+    xhr.open('POST', '/site/att', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -185,12 +185,12 @@ function sendAtt() {
         console.log(xhr.response);
     };
 
-    xhr.send(JSON.stringify(Att));
+    xhr.send(JSON.stringify({Att: Att}));
 }
 
 function getOutputPower() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', '/M3M/output-power', true);
+  xhr.open('GET', '/site/M3M/output-power', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
 
   xhr.onload = function() {
