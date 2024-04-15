@@ -6,8 +6,8 @@ const port = new serialPort( {
     baudRate: 115200,
 })
 
-port.write('SYST:CONF:IP 172.16.17.56\n')
-port.write('SYST:CONF:IP?\n')
+//port.write('SYST:CONF:IP 172.16.17.56\n')
+port.write(':SYST:COMMunicate:RDEVice:TYPE?\n')
 port.on('data', function (data) {
     console.log('Data:', parseInt(data))
 })
