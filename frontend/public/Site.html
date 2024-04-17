@@ -50,7 +50,12 @@
       <form>
         <label for="inputAtt">Ослабление:</label>
         <input type="text" id="inputAtt"><br>
-        <button type="button" class="btn btn-success pressButton" id="ExecuteAtt" onclick="sendAtt(); closeModalID('Att');">Отправить</button>
+        <div class="connection-indicator">
+          <button type="button" class="btn btn-success pressButton" id="ExecuteAtt" onclick="sendAtt(); closeModalID('Att');">Отправить</button>
+          <div class="indicator-circle"></div>
+          <div class="connection-status">Не подключено</div>
+          <div class="connection-type"></div>
+        </div>
       </form>
     </div>
   </div>
