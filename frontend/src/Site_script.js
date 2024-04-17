@@ -188,6 +188,43 @@ function sendAtt() {
     xhr.send(JSON.stringify({Att: Att}));
 }
 
+function updateConnectionStatus(isConnected, connectionType) {
+  const indicatorCircle = document.querySelector('.indicator-circle');
+  const connectionStatus = document.querySelector('.connection-status');
+  const connectionTypeElement = document.querySelector('.connection-type');
+
+  if (isConnected) {
+    indicatorCircle.style.backgroundColor = '#28a745;';
+    connectionStatus.textContent = 'Подключение';
+    connectionTypeElement.textContent = connectionType;
+  } else {
+    indicatorCircle.style.backgroundColor = '#ff0000';
+    connectionStatus.textContent = 'Не подключено';
+    connectionTypeElement.textContent = '';
+  }
+
+  var xhr = new XMLHttpRequest();
+
+  xhr.open('GET', '/site/att', true);
+
+  xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 400) {
+      var data = JSON.parse(xhr.responseText);
+      var isConnected = data.connected;
+      var connectionType = data.connectionType;
+      updateConnectionStatus(isConnected, connectionType);
+    } else {
+      console.error('Ошибка запроса: ', xhr.statusText);
+    }
+  };
+
+  xhr.onerror = function () {
+    console.error('Ошибка сетевого запроса.');
+  };
+
+  xhr.send();
+}
+
 function getOutputPower() {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', '/site/M3M/output-power', true);
