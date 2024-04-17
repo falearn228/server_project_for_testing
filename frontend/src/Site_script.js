@@ -203,7 +203,7 @@ function updateConnectionStatus(isConnected, connectionType) {
     connectionTypeElement.textContent = '';
   }
 
-  var xhr = new XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
 
   xhr.open('GET', '/site/att', true);
 
