@@ -3,7 +3,7 @@ const snmp = require('net-snmp');
 // Настройки для подключения к устройству
 const options = {
   hostTest: '172.16.17.220',
-  hostPlay: '172.16.17.220'
+  hostPlay: '172.16.17.79'
 };
 
 var MyVarbind= //example of structre
@@ -44,12 +44,22 @@ function oidMaker(whatOid,Value)
 }
 
 function setOid(oidToSet, value, isItTestingStation=true)
+function setOid(oidToSet, value, isItTestingStation=true)
 {
   oidMaker(oidToSet, value)
   if(MyVarbind.oid=="")
   {
     return "Can't set oid. Invalid Oid";
   }
+
+  if(isItTestingStation)
+  {
+    const session = snmp.createSession(options.hostTest);
+  }
+  else
+  {
+    const session = snmp.createSession(options.hostPlay)
+  }  
 
   if(isItTestingStation)
   {
@@ -78,6 +88,7 @@ function setOid(oidToSet, value, isItTestingStation=true)
 }
 
 function getOid(oid,isItTestingStation=true)//maybe We need to change it// What if we will need to set many oid in one time
+function getOid(oid,isItTestingStation=true)//maybe We need to change it// What if we will need to set many oid in one time
 {
   switch(whatOid)
   {
@@ -101,6 +112,15 @@ function getOid(oid,isItTestingStation=true)//maybe We need to change it// What 
       return "Can't get oid. Invalid OID"
     }
   }
+  
+  if(isItTestingStation)
+  {
+    const session = snmp.createSession(options.hostTest);
+  }
+  else
+  {
+    const session = snmp.createSession(options.hostPlay)
+  }  
   
   if(isItTestingStation)
   {
