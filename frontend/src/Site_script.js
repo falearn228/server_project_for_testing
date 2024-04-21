@@ -7,21 +7,76 @@ function closeModalID(ModalID) {
 }
 
  let inputField = document.getElementById('inputField'); 
- const pressButton = document.getElementById('pressButton');
- const disconnectButton = document.getElementById('disconnectButton');
- const connectButton = document.getElementById('connectButton');
- const pressButton_display = document.getElementById("pressButton");
+ const disconnectButtonBercut = document.getElementById('disconnectButtonBercut');
+ const connectButtonBercut = document.getElementById('connectButtonBercut');
+ const pressButtonBercut_display = document.getElementById("pressButtonBercut");
 
-function connect() {
+connectionSwitch.addEventListener('change', function() {
+  if (this.checked) {
+    connectionType.textContent = 'Ethernet';
+    console.log('Выбрано подключение через Ethernet');
+  } else {
+    connectionType.textContent = 'COM-port';
+    console.log('Выбрано подключение через COM-port');
+  }
+});
+
+function connectAtt() {
+  const indicatorCircle = document.querySelector('.indicator-circle');
+  const connectionStatus = document.querySelector('.connection-status');
+  const connectButtonAtt = document.getElementById('connectButtonAtt');
+  const connectionSwitch = document.getElementById('connectionSwitch');
+  const connectionType = document.getElementById('connectionType');
+  const xhr = new XMLHttpRequest();
+
+  const selectedConnectionType = connectionType.textContent;
+  const url = `/api/connection-status${selectedConnectionType}`;
+
+  xhr.open('GET', url, true);
+
+  xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 400) {
+        if (connectionType.textContent == 'Ethernet') {
+        indicatorCircle.style.backgroundColor = '#28a745;';
+        connectionStatus.textContent = 'Подключено';
+        connectionSwitch.disabled = true;
+        connectButtonAtt.display = 'none';
+      } else if (connectionType.textContent == 'COM-port') {
+        indicatorCircle.style.backgroundColor = '#28a745;';
+        connectionStatus.textContent = 'Подключено';
+        connectionSwitch.disabled = true;
+        connectButtonAtt.display = 'none';
+      }
+        else {
+        indicatorCircle.style.backgroundColor = '#ff0000';
+        connectionStatus.textContent = 'Не подключено';
+        connectionSwitch.disabled = false;
+        connectButtonAtt.display = 'flex';
+        }
+    } else {
+      console.error('Ошибка запроса: ', xhr.statusText);
+    }
+  };
+
+  xhr.onerror = function () {
+    console.error('Ошибка сетевого запроса.');
+  };
+
+  xhr.send();
+}
+
+setInterval(connectAtt, 2000);
+
+function connectBercut() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/site/bert/connect', true);
+    xhr.open('POST', '/bert/connect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            connectButton.style.display = 'none';
-            pressButton_display.style.display = 'flex';
-            disconnectButton.style.display = 'flex';
+            connectButtonBercut.style.display = 'none';
+            pressButtonBercut_display.style.display = 'flex';
+            disconnectButtonBercut.style.display = 'flex';
             console.log("Статус отключения: ",xhr.response);
         } else if (xhr.status >= 400) {
             console.error("Ошибка запроса подключения: ", xhr.status);
@@ -35,15 +90,15 @@ function connect() {
     xhr.send();
 }
 
-function disconnect() {
+function disconnectBercut() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/site/bert/disconnect', true);
+    xhr.open('Post', '/bert/disconnect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
         if (xhr.status === 200) {
             container.style.display = 'none';
-            connectButton.style.display = 'flex';
+            connectButtonBercut.style.display = 'flex';
             console.log("Статус подключения: ", xhr.response);
         } else if (xhr.status >= 400) {
             console.error("Ошибка запроса отключения: ", xhr.status);
@@ -62,7 +117,7 @@ function sendCommandToBackend() {
     const command = inputField.value;
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/site/bert/process', true);
+    xhr.open('POST', '/bert/process', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -106,7 +161,7 @@ function sendStat1() {
     ]
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/site/snmp/process', true);
+    xhr.open('POST', '/snmp/process', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -147,7 +202,7 @@ function sendStat2() {
     ]
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/site/snmp/process', true);
+    xhr.open('POST', '/snmp/process', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -170,7 +225,7 @@ function sendAtt() {
     let Att = inputAtt.value;
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/site/att', true);
+    xhr.open('POST', '/att', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -185,49 +240,12 @@ function sendAtt() {
         console.log(xhr.response);
     };
 
-    xhr.send(JSON.stringify({Att: Att}));
-}
-
-function updateConnectionStatus(isConnected, connectionType) {
-  const indicatorCircle = document.querySelector('.indicator-circle');
-  const connectionStatus = document.querySelector('.connection-status');
-  const connectionTypeElement = document.querySelector('.connection-type');
-
-  if (isConnected) {
-    indicatorCircle.style.backgroundColor = '#28a745;';
-    connectionStatus.textContent = 'Подключение';
-    connectionTypeElement.textContent = connectionType;
-  } else {
-    indicatorCircle.style.backgroundColor = '#ff0000';
-    connectionStatus.textContent = 'Не подключено';
-    connectionTypeElement.textContent = '';
-  }
-
-  const xhr = new XMLHttpRequest();
-
-  xhr.open('GET', '/site/att', true);
-
-  xhr.onload = function () {
-    if (xhr.status >= 200 && xhr.status < 400) {
-      var data = JSON.parse(xhr.responseText);
-      var isConnected = data.connected;
-      var connectionType = data.connectionType;
-      updateConnectionStatus(isConnected, connectionType);
-    } else {
-      console.error('Ошибка запроса: ', xhr.statusText);
-    }
-  };
-
-  xhr.onerror = function () {
-    console.error('Ошибка сетевого запроса.');
-  };
-
-  xhr.send();
+    xhr.send(JSON.stringify(Att));
 }
 
 function getOutputPower() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', '/site/M3M/output-power', true);
+  xhr.open('GET', '/M3M/output-power', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
 
   xhr.onload = function() {
