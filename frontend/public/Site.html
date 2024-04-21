@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Мой сайт</title>
-  <link rel="stylesheet" type="text/css" href="/Site_styles.css">
+  <link rel="stylesheet" type="text/css" href="Site_styles.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Тестирование связи между устройствами">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -36,9 +36,9 @@
         <label for="inputField">Команда:</label>
         <input type="text" id="inputField"><br>
         <div class="buttons-wrap">
-          <button type="button" class="btn btn-primary" id="connectButton" onclick="connect()">Подключиться</button>
-          <button type="button" class="btn btn-success" class="pressButton" id="pressButton" onclick="sendCommandToBackend(); closeModalID('Bercut');">Отправить</button>
-          <button type="button" class="btn btn-danger" id="disconnectButton" onclick="disconnect()">Отключиться</button>
+          <button type="button" class="btn btn-primary" id="connectButtonBercut" onclick="connectBercut()">Подключиться</button>
+          <button type="button" class="btn btn-success pressButton" id="pressButtonBercut" onclick="sendCommandToBackend(); closeModalID('Bercut');">Отправить</button>
+          <button type="button" class="btn btn-danger" id="disconnectButtonBercut" onclick="disconnectBercut()">Отключиться</button>
         </div>
       </form>
     </div>
@@ -50,12 +50,19 @@
       <form>
         <label for="inputAtt">Ослабление:</label>
         <input type="text" id="inputAtt"><br>
-        <div class="connection-indicator">
-          <button type="button" class="btn btn-success pressButton" id="ExecuteAtt" onclick="sendAtt(); closeModalID('Att');">Отправить</button>
+        <div class="buttons-wrap">
+          <button type="button" class="btn btn-success pressButton" id="pressButtonAtt" onclick="sendAtt(); closeModalID('Att');">Отправить</button>
+          <button type="button" class="btn btn-primary" id="connectButtonAtt" onclick="connectAtt()">Подключиться</button>
+          <div class="switch-container">
+            <label class="switch">
+              <input type="checkbox" id="connectionSwitch">
+              <span class="slider"></span>
+            </label>
+            <span id="connectionType">COM-port</span>
+          </div>
           <div class="indicator-circle"></div>
           <div class="connection-status">Не подключено</div>
-          <div class="connection-type"></div>
-        </div>
+        </div>      
       </form>
     </div>
   </div>
@@ -120,13 +127,13 @@
   <div id="M3M" class="Bercut">
     <div class="Bercut-content">
       <span class="close" onclick="closeModalID('M3M')">&times;</span>
-      <h2>Вывод мощности</h2>
+      <h2>Введите данные</h2>
       <form>
-        <p>Значение: <span id="outputPowerValue"></span></p>
+        <p>Значение: <input type="text" span id="outputPowerValue"></span></p>
         <button type="button" class="btn btn-primary pressButton" id="viewOutputPower" onclick="getOutputPower();">Просмотр</button>
       </form>
     </div>
   </div>
-  <script type="text/javascript" src="/Site_script.js"></script>
+  <script type="text/javascript" src="Site_script.js"></script>
 </body>
 </html>
