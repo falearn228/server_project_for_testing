@@ -69,7 +69,7 @@ setInterval(connectAtt, 2000);
 
 function connectBercut() {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/bert/connect', true);
+    xhr.open('GET', '/bert/connect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -92,7 +92,7 @@ function connectBercut() {
 
 function disconnectBercut() {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/bert/disconnect', true);
+    xhr.open('GET', '/bert/disconnect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
@@ -246,7 +246,7 @@ function sendAtt() {
 
 function getOutputPower() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', '/M3M/output-power', true);
+  xhr.open('POST', '/M3M/output-power', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
 
   xhr.onload = function() {
