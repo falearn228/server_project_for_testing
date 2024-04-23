@@ -92,13 +92,14 @@ function connectBercut() {
 
 function disconnectBercut() {
     const xhr = new XMLHttpRequest();
-    xhr.open('Post', '/bert/disconnect', true);
+    xhr.open('POST', '/bert/disconnect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            container.style.display = 'none';
             connectButtonBercut.style.display = 'flex';
+            pressButtonBercut_display.style.display = 'none';
+            disconnectButtonBercut.style.display = 'none';
             console.log("Статус подключения: ", xhr.response);
         } else if (xhr.status >= 400) {
             console.error("Ошибка запроса отключения: ", xhr.status);
