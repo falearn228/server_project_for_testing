@@ -25,9 +25,140 @@
     </ul>
   </nav>
   <div class="content">
-    <pre id="responseBlock">Вывод беркута:</pre>
+    <div class="informationMenu">
+      <table class="statusName">
+        <thead>
+        <tr>
+          <th>Статус подключений устройств</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              Беркут
+            </td>
+            <td id="BercutConnectionStatus">
+              Отключено
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Аттенюатор
+            </td>
+            <td id="AttConnectionStatus">
+              Отключено
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Станция №1
+            </td>
+            <td id="Stat1ConnectionStatus">
+              Отключено
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Станция №2
+            </td>
+            <td id="Stat2ConnectionStatus">
+              Отключено
+            </td>
+          </tr>
+          <tr>
+            <td>
+              M3M
+            </td>
+            <td id="M3MConnectionStatus">
+              Отключено
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    <div class="devicesInfo">
+      <table class="statusName">
+        <thead>
+        <tr>
+          <th>Параметры</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              Станция №1
+            </td>
+            <td>
+            </td>
+            <td class ="StationMargin2">
+              Станция №2
+            </td>
+            <td>
+            </td>
+            <td>
+             Аттенюатор
+            </td>
+          </tr>
+          <tr>
+            <td>
+              IP адрес:
+            </td>
+            <td class="Params" id="Stat1IpAddress">
+            </td>
+            <td class ="StationMargin2" >
+              IP адрес:
+            </td>
+            <td class="Params" id="Stat2IpAddress">
+            </td>
+            <td id="AttTypeConnection">Подключение: 
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Частота:
+            </td>
+            <td class="Params" id="Stat1Frequency">
+            </td>
+            <td class ="StationMargin2" >
+              Частота:
+            </td>
+            <td class="Params" id="Stat2Frequency">
+            </td>
+            <td id="Attenuation">Ослабление: 
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Режим работы:
+            </td>
+            <td class="Params" id="Stat1Regime">
+            </td>
+            <td class ="StationMargin2" >
+              Режим работы:
+            </td>
+            <td class="Params" id="Stat2Regime">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Ширина полосы:
+            </td>
+            <td class="Params" id="Stat1Bandwidth">
+            </td>
+            <td class ="StationMargin2" >
+              Ширина полосы:
+            </td>
+            <td class="Params" id="Stat2Bandwidth">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-
+  <hr>  
+  <div class="BercutOutput">
+      <pre id="responseBlock">Вывод беркута:</pre>
+    </div>
+  </div>
   <div id="Bercut" class="Bercut">
     <div class="Bercut-content">
       <span class="close" onclick="closeModalID('Bercut')">&times;</span>
@@ -73,7 +204,9 @@
       <form>
         <div class="form-group">
           <label for="inputFrequency1">Частота станции, МГц</label>
-          <input type="text" id="inputFrequency1" placeholder="Например, 6000" autofocus>
+          <input type="text" id="inputFrequency1" placeholder="Введите частоту" autofocus>
+          <label for="inputIP1" class="labelIP">IP адрес станции №1</label>
+          <input type="text" class="ip-address" id="inputIP1" placeholder="XXX.XXX.XXX.XXX" maxlength="15">
         </div>
         <div class="form-group">
           <label for="selectionRegime1">Выберите режим работы
@@ -102,7 +235,9 @@
       <form>
         <div class="form-group">
           <label for="inputFrequency2">Частота станции, МГц</label>
-          <input type="text" id="inputFrequency2" placeholder="Например, 6000" autofocus>
+          <input type="text" id="inputFrequency2" placeholder="Введите частоту" autofocus>
+          <label for="inputIP2" class="labelIP">IP адрес станции №2</label>
+          <input type="text" class="ip-address" id="inputIP2" placeholder="XXX.XXX.XXX.XXX" maxlength="15">
         </div>
         <div class="form-group">
           <label for="selectionRegime2">Выберите режим работы
@@ -129,7 +264,7 @@
       <span class="close" onclick="closeModalID('M3M')">&times;</span>
       <h2>Введите данные</h2>
       <form>
-        <p>Значение: <input type="text" span id="outputPowerValue"></span></p>
+        <p>Значение: <span><input type="text" span id="outputPowerValue"></span></p>
         <button type="button" class="btn btn-primary pressButton" id="viewOutputPower" onclick="getOutputPower();">Просмотр</button>
       </form>
     </div>
