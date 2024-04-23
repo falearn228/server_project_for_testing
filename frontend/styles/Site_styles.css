@@ -9,6 +9,47 @@ header {
   padding: 6px;
 }
 
+.informationMenu {
+  display: flex;
+}
+
+.params {
+  font-weight: bold;
+}
+
+th {
+  padding-bottom: 5px
+}
+
+td {
+  padding: 5px;
+}
+
+.devicesInfo {
+  margin-left: 150px;
+}
+
+.StationMargin2 {
+  padding-left: 50px;
+}
+
+.statusName, .devicesInfo {
+  padding: 5px;
+}
+
+#BercutConnectionStatus, #AttConnectionStatus {
+  color: #FF0000;
+  font-weight: bold;
+}
+
+.labelIP {
+  margin-left: 10px;
+}
+
+.form-group {
+  padding: 3px;
+}
+
 .switch-container {
   display: flex;
   align-items: center;
@@ -119,6 +160,10 @@ input:checked + .slider:before {
 .pressButton {
     padding: 5px;
     margin-top: 5px;
+}
+
+.BercutOutput {
+  display: block;
 }
 
 #responseBlock {
