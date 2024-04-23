@@ -2,8 +2,8 @@ const snmp = require('net-snmp');
 
 // Настройки для подключения к устройству
 const options = {
-  host: '172.16.17.220',
-  community: 'public',
+  hostTest: '172.16.17.220',
+  hostPlay: '172.16.17.79'
 };
 
 var varbinds= //example of structre
@@ -43,15 +43,32 @@ function oidMaker(whatOid, Value)
   }
 }
 
-function setOid(oidToSet, value)
+function setOid(oidToSet, value, isItTestingStation=true)
+function setOid(oidToSet, value, isItTestingStation=true)
 {
   oidMaker(oidToSet, value)
   if(varbinds.oid=="")
   {
     return "Can't set oid. Invalid Oid";
   }
-    
-  const session = snmp.createSession(options.host, options.community);
+
+  if(isItTestingStation)
+  {
+    const session = snmp.createSession(options.hostTest);
+  }
+  else
+  {
+    const session = snmp.createSession(options.hostPlay)
+  }  
+
+  if(isItTestingStation)
+  {
+    const session = snmp.createSession(options.hostTest);
+  }
+  else
+  {
+    const session = snmp.createSession(options.hostPlay)
+  }  
 
   session.set(varbinds, function (error, varbinds) {
     if (error) {
@@ -70,7 +87,8 @@ function setOid(oidToSet, value)
   });
 }
 
-function getOid(whatOid)//maybe We need to change it// What if we will need to set many oid in one time
+function getOid(oid,isItTestingStation=true)//maybe We need to change it// What if we will need to set many oid in one time
+function getOid(oid,isItTestingStation=true)//maybe We need to change it// What if we will need to set many oid in one time
 {
   switch(whatOid)
   {
@@ -94,7 +112,24 @@ function getOid(whatOid)//maybe We need to change it// What if we will need to s
       return "Can't get oid. Invalid OID"
     }
   }
-  const session = snmp.createSession(options.host, options.community);
+  
+  if(isItTestingStation)
+  {
+    const session = snmp.createSession(options.hostTest);
+  }
+  else
+  {
+    const session = snmp.createSession(options.hostPlay)
+  }  
+  
+  if(isItTestingStation)
+  {
+    const session = snmp.createSession(options.hostTest);
+  }
+  else
+  {
+    const session = snmp.createSession(options.hostPlay)
+  }  
 
   session.get([oid], function (error, varbinds) {
     if (error) {
