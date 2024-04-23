@@ -6,10 +6,33 @@ function closeModalID(ModalID) {
   document.getElementById(ModalID).style.display = "none";
 }
 
- let inputField = document.getElementById('inputField'); 
+ const inputField = document.getElementById('inputField'); 
  const disconnectButtonBercut = document.getElementById('disconnectButtonBercut');
  const connectButtonBercut = document.getElementById('connectButtonBercut');
  const pressButtonBercut_display = document.getElementById("pressButtonBercut");
+
+ const indicatorCircle = document.querySelector('.indicator-circle');
+ const connectionStatus = document.querySelector('.connection-status');
+ const connectButtonAtt = document.getElementById('connectButtonAtt');
+ const connectionSwitch = document.getElementById('connectionSwitch');
+ const connectionType = document.getElementById('connectionType');
+
+ const BercutConnectionStatus = document.getElementById('BercutConnectionStatus');
+ const AttConnectionStatus = document.getElementById('AttConnectionStatus');
+
+ const AttTypeConnection = document.getElementById('AttTypeConnection');
+ const Attenuation= document.getElementById('Attenuation');
+
+ const Stat1IpAddress = document.getElementById("Stat1IpAddress");
+ const Stat1Frequency = document.getElementById("Stat1Frequency");
+ const Stat1Regime = document.getElementById("Stat1Regime");
+ const Stat1Bandwidth = document.getElementById("Stat1Bandwidth");
+
+ const Stat2IpAddress = document.getElementById("Stat2IpAddress");
+ const Stat2Frequency = document.getElementById("Stat2Frequency");
+ const Stat2Regime = document.getElementById("Stat2Regime");
+ const Stat2Bandwidth = document.getElementById("Stat2Bandwidth");
+
 
 connectionSwitch.addEventListener('change', function() {
   if (this.checked) {
@@ -22,11 +45,6 @@ connectionSwitch.addEventListener('change', function() {
 });
 
 function connectAtt() {
-  const indicatorCircle = document.querySelector('.indicator-circle');
-  const connectionStatus = document.querySelector('.connection-status');
-  const connectButtonAtt = document.getElementById('connectButtonAtt');
-  const connectionSwitch = document.getElementById('connectionSwitch');
-  const connectionType = document.getElementById('connectionType');
   const xhr = new XMLHttpRequest();
 
   const selectedConnectionType = connectionType.textContent;
@@ -37,17 +55,26 @@ function connectAtt() {
   xhr.onload = function () {
     if (xhr.status >= 200 && xhr.status < 400) {
         if (connectionType.textContent == 'Ethernet') {
+        AttTypeConnection.textContent = 'Подключение: Ethernet';
+        AttConnectionStatus.style.color = '#28a745';
+        AttConnectionStatus.style.textContent = 'Подключено'
         indicatorCircle.style.backgroundColor = '#28a745;';
         connectionStatus.textContent = 'Подключено';
         connectionSwitch.disabled = true;
         connectButtonAtt.display = 'none';
       } else if (connectionType.textContent == 'COM-port') {
+        AttTypeConnection.textContent = 'Подключение: COM-port';
+        AttConnectionStatus.style.color = '#28a745';
+        AttConnectionStatus.style.textContent = 'Подключено'
         indicatorCircle.style.backgroundColor = '#28a745;';
         connectionStatus.textContent = 'Подключено';
         connectionSwitch.disabled = true;
         connectButtonAtt.display = 'none';
       }
         else {
+        AttTypeConnection.textContent = 'Подключение:';
+        AttConnectionStatus.style.color = '#ff0000';
+        AttConnectionStatus.style.textContent = 'Отключено'
         indicatorCircle.style.backgroundColor = '#ff0000';
         connectionStatus.textContent = 'Не подключено';
         connectionSwitch.disabled = false;
@@ -74,6 +101,8 @@ function connectBercut() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
+            BercutConnectionStatus.style.color = '#28a745';
+            BercutConnectionStatus.style.textContent = 'Подключено'
             connectButtonBercut.style.display = 'none';
             pressButtonBercut_display.style.display = 'flex';
             disconnectButtonBercut.style.display = 'flex';
@@ -92,11 +121,13 @@ function connectBercut() {
 
 function disconnectBercut() {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/bert/disconnect', true);
+    xhr.open('Post', '/bert/disconnect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
         if (xhr.status === 200) {
+            BercutConnectionStatus.style.color = '#ff0000';
+            BercutConnectionStatus.style.textContent = 'Отключено'
             connectButtonBercut.style.display = 'flex';
             pressButtonBercut_display.style.display = 'none';
             disconnectButtonBercut.style.display = 'none';
@@ -167,6 +198,9 @@ function sendStat1() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
+            Stat1Frequency.textContent = frequency;
+            Stat1Regime.textContent = regime;
+            Stat1Bandwidth.textContent = bandwidth;
             console.log(xhr.response);
         } else if (xhr.status >= 400) {
             console.error("Ошибка запроса: ", xhr.status);
@@ -208,6 +242,9 @@ function sendStat2() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
+            Stat2Frequency.textContent = frequency;
+            Stat2Regime.textContent = regime;
+            Stat2Bandwidth.textContent = bandwidth;
             console.log(xhr.response);
         } else if (xhr.status >= 400) {
             console.error("Ошибка запроса: ", xhr.status);
@@ -223,6 +260,7 @@ function sendStat2() {
 
 function sendAtt() {
     const inputAtt = document.getElementById("inputAtt");
+    const Attenuation = document.getElementById("Attenuation");
     let Att = inputAtt.value;
 
     const xhr = new XMLHttpRequest();
@@ -231,6 +269,7 @@ function sendAtt() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
+            Attenuation.innerHTML += Att;
             console.log(xhr.response);
         } else if (xhr.status >= 400) {
             console.error("Ошибка запроса: ", xhr.status);
@@ -265,3 +304,34 @@ function getOutputPower() {
 
   xhr.send();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  let ipAddressInputs = document.getElementsByClassName('ip-address');
+
+  for (let i = 0; i < ipAddressInputs.length; i++) {
+    let ipAddressInput = ipAddressInputs[i];
+
+    ipAddressInput.addEventListener('input', function(e) {
+      let value = e.target.value;
+      value = value.replace(/[^0-9.]/g, '');
+      
+      let octets = value.split('.');
+      for (let j = 0; j < octets.length; j++) {
+        if (octets[j] !== '') {
+          octets[j] = parseInt(octets[j]);
+          if (isNaN(octets[j]) || octets[j] < 0 || octets[j] > 255) {
+            octets[j] = '255';
+          }
+        }
+      }
+      
+      e.target.value = octets.join('.');
+    });
+
+    ipAddressInput.addEventListener('keydown', function(e) {
+      if (e.key === '.' && (e.target.value === '' || e.target.value.endsWith('.'))) {
+        e.preventDefault();
+      }
+    });
+  }
+});
