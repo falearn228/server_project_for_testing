@@ -11,11 +11,12 @@ function closeModalID(ModalID) {
  const connectButtonBercut = document.getElementById('connectButtonBercut');
  const pressButtonBercut_display = document.getElementById("pressButtonBercut");
 
- const indicatorCircle = document.querySelector('.indicator-circle');
+ const indicatorCircle = document.getElementById('indicator-circle');
  const connectionStatus = document.querySelector('.connection-status');
  const connectButtonAtt = document.getElementById('connectButtonAtt');
  const connectionSwitch = document.getElementById('connectionSwitch');
  const connectionType = document.getElementById('connectionType');
+ const pressButtonAtt = document.getElementById('pressButtonAtt');
 
  const BercutConnectionStatus = document.getElementById('BercutConnectionStatus');
  const AttConnectionStatus = document.getElementById('AttConnectionStatus');
@@ -51,25 +52,27 @@ function connectAtt() {
   const url = `/api/connection-status${selectedConnectionType}`;
 
   xhr.open('GET', url, true);
-
+  xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onload = function () {
     if (xhr.status >= 200 && xhr.status < 400) {
         if (connectionType.textContent == 'Ethernet') {
         AttTypeConnection.textContent = 'Подключение: Ethernet';
         AttConnectionStatus.style.color = '#28a745';
         AttConnectionStatus.textContent = 'Подключено'
-        indicatorCircle.style.backgroundColor = '#28a745;';
+        indicatorCircle.style.backgroundColor = '#28a745';
         connectionStatus.textContent = 'Подключено';
         connectionSwitch.disabled = true;
-        connectButtonAtt.display = 'none';
+        connectButtonAtt.style.display = 'none';
+        pressButtonAtt.style.display = 'flex';
       } else if (connectionType.textContent == 'COM-port') {
         AttTypeConnection.textContent = 'Подключение: COM-port';
         AttConnectionStatus.style.color = '#28a745';
         AttConnectionStatus.textContent = 'Подключено'
-        indicatorCircle.style.backgroundColor = '#28a745;';
+        indicatorCircle.style.backgroundColor = '#28a745';
         connectionStatus.textContent = 'Подключено';
         connectionSwitch.disabled = true;
-        connectButtonAtt.display = 'none';
+        connectButtonAtt.style.display = 'none';
+        pressButtonAtt.style.display = 'flex';
       }
         else {
         AttTypeConnection.textContent = 'Подключение:';
@@ -78,7 +81,8 @@ function connectAtt() {
         indicatorCircle.style.backgroundColor = '#ff0000';
         connectionStatus.textContent = 'Не подключено';
         connectionSwitch.disabled = false;
-        connectButtonAtt.display = 'flex';
+        connectButtonAtt.style.display = 'flex';
+        pressButtonAtt.style.display = 'none';
         }
     } else {
       console.error('Ошибка запроса: ', xhr.statusText);
@@ -174,7 +178,7 @@ function sendStat1() {
     const inputFrequency1 = document.getElementById("inputFrequency1");
     const selectedRegime1 = document.getElementById('selectionRegime1');
     const selectedBandwidth1 = document.getElementById('selectionBandwidth1');
-    const inputIP = document.getElementById('inputIP1');
+    const stat1ConnectionStatus = document.getElementById('Stat1ConnectionStatus');
     let frequency = inputFrequency1.value;
     let regime = selectedRegime1.value;
     let bandwidth = selectedBandwidth1.value;
@@ -190,10 +194,6 @@ function sendStat1() {
         {
             oid: "Width",
             value: bandwidth
-        },
-        {
-            oid: "IP",
-            value: inputIP.value
         }
     ]
 
@@ -203,11 +203,15 @@ function sendStat1() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            Stat1Frequency.textContent = frequency;
-            Stat1Regime.textContent = regime;
-            Stat1Bandwidth.textContent = bandwidth;
+            stat1ConnectionStatus.textContent = "Успешно";
+            stat1ConnectionStatus.style.color = "#28a745";
+            Stat1Frequency.textContent = frequency + " МГц";
+            Stat1Regime.textContent = (regime ? "База" : "Абонент");
+            Stat1Bandwidth.textContent = (bandwidth > 3 ? "20 МГц" : "10 МГц");
             console.log(xhr.response);
         } else if (xhr.status >= 400) {
+            stat1ConnectionStatus.textContent = "Ошибка";
+            stat1ConnectionStatus.style.color = "#ff0000";
             console.error("Ошибка запроса: ", xhr.status);
         }
     };
@@ -222,7 +226,7 @@ function sendStat2() {
     const inputFrequency2 = document.getElementById("inputFrequency2");
     const selectedRegime2 = document.getElementById('selectionRegime2');
     const selectedBandwidth2 = document.getElementById('selectionBandwidth2');
-    const inputIP = document.getElementById('inputIP2');
+    const stat2ConnectionStatus = document.getElementById('Stat2ConnectionStatus');
     let frequency = inputFrequency2.value;
     let regime = selectedRegime2.value;
     let bandwidth = selectedBandwidth2.value;
@@ -238,10 +242,6 @@ function sendStat2() {
         {
             oid: "Width",
             value: bandwidth
-        },
-        {
-            oid: "IP",
-            value: inputIP.value
         }
     ]
 
@@ -251,11 +251,15 @@ function sendStat2() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            Stat2Frequency.textContent = frequency;
-            Stat2Regime.textContent = regime;
-            Stat2Bandwidth.textContent = bandwidth;
+            stat2ConnectionStatus.textContent = "Успешно";
+            stat2ConnectionStatus.style.color = "#28a745";
+            Stat2Frequency.textContent = frequency + " МГц";
+            Stat2Regime.textContent = (regime ? "База" : "Абонент");;
+            Stat2Bandwidth.textContent = (bandwidth > 3 ? "20 МГц" : "10 МГц");
             console.log(xhr.response);
         } else if (xhr.status >= 400) {
+            stat2ConnectionStatus.textContent = "Ошибка";
+            stat2ConnectionStatus.style.color = "#ff0000";
             console.error("Ошибка запроса: ", xhr.status);
         }
     };
@@ -270,15 +274,15 @@ function sendStat2() {
 function sendAtt() {
     const inputAtt = document.getElementById("inputAtt");
     const Attenuation = document.getElementById("Attenuation");
-    let Att = inputAtt.value;
-
+    let Att = [inputAtt.value];
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '/att', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
+
     xhr.onload = function() {
         if (xhr.status === 200) {
-            Attenuation.innerHTML += Att;
+            Attenuation.textContent = "Ослабление: " + Att + " Дб";
             console.log(xhr.response);
         } else if (xhr.status >= 400) {
             console.error("Ошибка запроса: ", xhr.status);
@@ -313,34 +317,3 @@ function getOutputPower() {
 
   xhr.send();
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-  let ipAddressInputs = document.getElementsByClassName('ip-address');
-
-  for (let i = 0; i < ipAddressInputs.length; i++) {
-    let ipAddressInput = ipAddressInputs[i];
-
-    ipAddressInput.addEventListener('input', function(e) {
-      let value = e.target.value;
-      value = value.replace(/[^0-9.]/g, '');
-      
-      let octets = value.split('.');
-      for (let j = 0; j < octets.length; j++) {
-        if (octets[j] !== '') {
-          octets[j] = parseInt(octets[j]);
-          if (isNaN(octets[j]) || octets[j] < 0 || octets[j] > 255) {
-            octets[j] = '255';
-          }
-        }
-      }
-      
-      e.target.value = octets.join('.');
-    });
-
-    ipAddressInput.addEventListener('keydown', function(e) {
-      if (e.key === '.' && (e.target.value === '' || e.target.value.endsWith('.'))) {
-        e.preventDefault();
-      }
-    });
-  }
-});

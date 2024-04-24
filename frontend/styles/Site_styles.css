@@ -42,10 +42,6 @@ td {
   font-weight: bold;
 }
 
-.labelIP {
-  margin-left: 10px;
-}
-
 .form-group {
   padding: 3px;
 }
@@ -144,6 +140,10 @@ input:checked + .slider:before {
 
 #disconnectButtonBercut {
     display: none;
+}
+
+#pressButtonAtt {
+  display: none;
 }
 
 #pressButtonBercut {
@@ -268,7 +268,7 @@ input:checked + .slider:before {
   padding: 10px;
 }
 
-.indicator-circle {
+#indicator-circle {
   margin-top: 9px;
   margin-left: 10px;
   width: 20px;
