@@ -117,6 +117,9 @@ app.get("/StationScript.js", (req, res) =>{
   res.sendFile("/StationScript.js", {root: path.join(frontPath, 'src')});
 });
 
+app.get("/18c04e70df67915d324cd6e02dac19c0.png", (req, res) =>{
+  res.sendFile("/18c04e70df67915d324cd6e02dac19c0.png", {root: path.join(frontPath, 'public')});
+});
 
 // Конец SNMP модуля
 
