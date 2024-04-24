@@ -258,10 +258,9 @@ input:checked + .slider:before {
 }
 
 #outputPowerValue {
-  border-style: outset;
   font-weight: bold;
   font-size: 18px;
-  color: #007bff;
+  color: black;
 }
 
 #viewOutputPower {
