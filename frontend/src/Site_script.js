@@ -252,11 +252,12 @@ function sendStat2() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
+            console.log(regime);
             Stat2IpAddress.textContent = xhr.response;
             stat2ConnectionStatus.textContent = "Успешно";
             stat2ConnectionStatus.style.color = "#28a745";
             Stat2Frequency.textContent = frequency + " МГц";
-            Stat2Regime.textContent = (regime ? "База" : "Абонент");;
+            Stat2Regime.textContent = (regime == true ? "База" : "Абонент");;
             Stat2Bandwidth.textContent = (bandwidth > 3 ? "20 МГц" : "10 МГц");
             console.log(xhr.response);
         } else if (xhr.status >= 400) {
@@ -300,14 +301,14 @@ function sendAtt() {
 
 function getOutputPower() {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', '/M3M/output-power', true);
+  xhr.open('POST', '/M3M/output-power', true);
   xhr.setRequestHeader('Content-Type', 'application/json');
 
   xhr.onload = function() {
     if (xhr.status === 200) {
       const response = JSON.parse(xhr.response);
       const outputPowerValue = document.getElementById('outputPowerValue');
-      outputPowerValue.textContent = response.value + " дБ";
+      outputPowerValue.textContent = response + " дБ";
     } else {
       console.error('Ошибка получения значения мощности:', xhr.status);
     }
