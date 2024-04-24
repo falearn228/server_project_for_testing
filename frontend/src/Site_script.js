@@ -57,7 +57,7 @@ function connectAtt() {
         if (connectionType.textContent == 'Ethernet') {
         AttTypeConnection.textContent = 'Подключение: Ethernet';
         AttConnectionStatus.style.color = '#28a745';
-        AttConnectionStatus.style.textContent = 'Подключено'
+        AttConnectionStatus.textContent = 'Подключено'
         indicatorCircle.style.backgroundColor = '#28a745;';
         connectionStatus.textContent = 'Подключено';
         connectionSwitch.disabled = true;
@@ -65,7 +65,7 @@ function connectAtt() {
       } else if (connectionType.textContent == 'COM-port') {
         AttTypeConnection.textContent = 'Подключение: COM-port';
         AttConnectionStatus.style.color = '#28a745';
-        AttConnectionStatus.style.textContent = 'Подключено'
+        AttConnectionStatus.textContent = 'Подключено'
         indicatorCircle.style.backgroundColor = '#28a745;';
         connectionStatus.textContent = 'Подключено';
         connectionSwitch.disabled = true;
@@ -74,7 +74,7 @@ function connectAtt() {
         else {
         AttTypeConnection.textContent = 'Подключение:';
         AttConnectionStatus.style.color = '#ff0000';
-        AttConnectionStatus.style.textContent = 'Отключено'
+        AttConnectionStatus.textContent = 'Отключено'
         indicatorCircle.style.backgroundColor = '#ff0000';
         connectionStatus.textContent = 'Не подключено';
         connectionSwitch.disabled = false;
@@ -92,17 +92,17 @@ function connectAtt() {
   xhr.send();
 }
 
-setInterval(connectAtt, 2000);
+//setInterval(connectAtt, 2000);
 
 function connectBercut() {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/bert/connect', true);
+    xhr.open('GET', '/bert/connect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
         if (xhr.status === 200) {
             BercutConnectionStatus.style.color = '#28a745';
-            BercutConnectionStatus.style.textContent = 'Подключено'
+            BercutConnectionStatus.textContent = 'Подключено' //
             connectButtonBercut.style.display = 'none';
             pressButtonBercut_display.style.display = 'flex';
             disconnectButtonBercut.style.display = 'flex';
@@ -121,13 +121,13 @@ function connectBercut() {
 
 function disconnectBercut() {
     const xhr = new XMLHttpRequest();
-    xhr.open('Post', '/bert/disconnect', true);
+    xhr.open('GET', '/bert/disconnect', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
         if (xhr.status === 200) {
             BercutConnectionStatus.style.color = '#ff0000';
-            BercutConnectionStatus.style.textContent = 'Отключено'
+            BercutConnectionStatus.textContent = 'Отключено'
             connectButtonBercut.style.display = 'flex';
             pressButtonBercut_display.style.display = 'none';
             disconnectButtonBercut.style.display = 'none';
@@ -174,6 +174,7 @@ function sendStat1() {
     const inputFrequency1 = document.getElementById("inputFrequency1");
     const selectedRegime1 = document.getElementById('selectionRegime1');
     const selectedBandwidth1 = document.getElementById('selectionBandwidth1');
+    const inputIP = document.getElementById('inputIP1');
     let frequency = inputFrequency1.value;
     let regime = selectedRegime1.value;
     let bandwidth = selectedBandwidth1.value;
@@ -189,6 +190,10 @@ function sendStat1() {
         {
             oid: "Width",
             value: bandwidth
+        },
+        {
+            oid: "IP",
+            value: inputIP.value
         }
     ]
 
@@ -210,14 +215,14 @@ function sendStat1() {
     xhr.onerror = function() {
         console.log(xhr.response);
     };
-
     xhr.send(JSON.stringify(InputedParams));
 }
 
 function sendStat2() {
-    const inputFrequency2 = document.getElementById("inputFrequency1");
-    const selectedRegime2 = document.getElementById('selectionRegime1');
-    const selectedBandwidth2 = document.getElementById('selectionBandwidth1');
+    const inputFrequency2 = document.getElementById("inputFrequency2");
+    const selectedRegime2 = document.getElementById('selectionRegime2');
+    const selectedBandwidth2 = document.getElementById('selectionBandwidth2');
+    const inputIP = document.getElementById('inputIP2');
     let frequency = inputFrequency2.value;
     let regime = selectedRegime2.value;
     let bandwidth = selectedBandwidth2.value;
@@ -233,6 +238,10 @@ function sendStat2() {
         {
             oid: "Width",
             value: bandwidth
+        },
+        {
+            oid: "IP",
+            value: inputIP.value
         }
     ]
 

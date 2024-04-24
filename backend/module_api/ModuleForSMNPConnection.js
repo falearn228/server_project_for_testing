@@ -2,7 +2,7 @@ const snmp = require('net-snmp');
 
 // Настройки для подключения к устройству
 const options = {
-  hostTest: '172.16.17.220',
+  hostTest: '172.16.17.206',
   hostPlay: '172.16.17.79'
 };
 
@@ -44,31 +44,22 @@ function oidMaker(whatOid, Value)
 }
 
 function setOid(oidToSet, value, isItTestingStation=true)
-function setOid(oidToSet, value, isItTestingStation=true)
 {
   oidMaker(oidToSet, value)
   if(varbinds.oid=="")
   {
     return "Can't set oid. Invalid Oid";
   }
-
+  a=""
   if(isItTestingStation)
   {
-    const session = snmp.createSession(options.hostTest);
+    a=options.hostTest
   }
   else
   {
-    const session = snmp.createSession(options.hostPlay)
+    a=options.hostPlay
   }  
-
-  if(isItTestingStation)
-  {
-    const session = snmp.createSession(options.hostTest);
-  }
-  else
-  {
-    const session = snmp.createSession(options.hostPlay)
-  }  
+  const session = snmp.createSession(a)
 
   session.set(varbinds, function (error, varbinds) {
     if (error) {
@@ -88,9 +79,8 @@ function setOid(oidToSet, value, isItTestingStation=true)
 }
 
 function getOid(oid,isItTestingStation=true)//maybe We need to change it// What if we will need to set many oid in one time
-function getOid(oid,isItTestingStation=true)//maybe We need to change it// What if we will need to set many oid in one time
 {
-  switch(whatOid)
+  switch(oid)
   {
     case "Frequncy":
     {
@@ -112,25 +102,16 @@ function getOid(oid,isItTestingStation=true)//maybe We need to change it// What 
       return "Can't get oid. Invalid OID"
     }
   }
-  
+  a=""
   if(isItTestingStation)
   {
-    const session = snmp.createSession(options.hostTest);
+    a=options.hostTest
   }
   else
   {
-    const session = snmp.createSession(options.hostPlay)
+    a=options.hostPlay
   }  
-  
-  if(isItTestingStation)
-  {
-    const session = snmp.createSession(options.hostTest);
-  }
-  else
-  {
-    const session = snmp.createSession(options.hostPlay)
-  }  
-
+  const session = snmp.createSession(a)
   session.get([oid], function (error, varbinds) {
     if (error) {
       console.error('Ошибка при чтении OID:', error);

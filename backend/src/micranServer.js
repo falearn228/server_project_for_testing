@@ -10,7 +10,7 @@ const port = 3000;
 
 app.use(bodyParser.json());
 const frontPath = path.join(__dirname + '../../../frontend');
-app.use(express.static('/fontend/public'));
+app.use(express.static('/frontend/public'));
 
 //ATT модуль
 
@@ -21,19 +21,33 @@ app.use(express.static('/fontend/public'));
 //M3M модуль
 
 //SNMP модуль
-app.post('/site/snmp/process', (req, res) =>{
-  const [freq, mode, width] = req.body;
+app.post('/snmp/process', (req, res) =>{
+  const [freq, mode, width, ipp] = req.body;
+  console.log(req.body)
   console.log(mode.oid, mode.value);
-  snmpModule.getOid(mode.oid);
-  snmpModule.setOid(mode.oid, parseInt(mode.value));
-  //snmpModule.setMode();
-  snmpModule.getOid(mode.oid);
+  if(ipp)
+  {
+    snmpModule.getOid(mode.oid);
+    snmpModule.setOid(mode.oid, parseInt(mode.value));
+    //snmpModule.setMode();
+    snmpModule.getOid(mode.oid);
+  }
+  else
+  {
+    snmpModule.getOid(mode.oid, false);
+    snmpModule.setOid(mode.oid, parseInt(mode.value), false);
+    //snmpModule.setMode();
+    snmpModule.getOid(mode.oid, false);
+  }
+
+  res.status(200).send("OID's OK")
 });
 //SNMP модуль
 
 //Беркут модуль
-app.post('/site/bert/process', async (req, res) => {
+app.post('/bert/process', async (req, res) => {
   const command = req.body.command;
+  console.log(command)
 try{
   await berkutModule.sendCommand(command);
   const output = berkutModule.getOutput();
@@ -45,12 +59,12 @@ try{
 
 });
 
-app.get('/site/bert/connect', (req, res) => {
+app.get('/bert/connect', (req, res) => {
 berkutModule.connectSSH();
 res.sendStatus(200);
 });
 
-app.get('/site/bert/disconnect', async (req, res) => {
+app.get('/bert/disconnect', async (req, res) => {
 const command = 'exit';
 try{
 await berkutModule.sendCommand(command);
@@ -66,7 +80,7 @@ res.status(500).send('Error occurred');
 
 
 //Основа сайта
-app.get("/site", (req, res) =>{
+app.get("", (req, res) =>{
   res.sendFile("/Site.html", {root: path.join(frontPath, 'public')});
 });
 

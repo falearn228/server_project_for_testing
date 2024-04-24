@@ -33,9 +33,10 @@ function sendCommand(command) {
     
     return new Promise((resolve, reject) => {
         output = ''; // Очищаем вывод перед отправкой новой команды
-
+        
         sshProcess.stdin.write(command + '\n');
-
+        console.log("Tuta")
+        
         sshProcess.stdout.once('data', (data) => {
             output += data.toString();
             console.log('Current output:', output);
