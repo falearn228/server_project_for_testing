@@ -1,268 +1,322 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Сайт стэнда</title>
-  <link rel="stylesheet" type="text/css" href="Site_styles.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Тестирование связи между устройствами">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <header>
-    <div class="logo">
-      <img src="18c04e70df67915d324cd6e02dac19c0.png" alt="Логотип">
-    </div>
-  </header>
-  <hr>
-  <nav class="sidebar">
-    <ul>
-      <li><a href="#" onclick="openModalID('Bercut')">Беркут</a></li>
-      <li><a href="#" onclick="openModalID('Att')">Аттенюатор</a></li>
-      <li><a href="#" onclick="openModalID('Stat1')">Станция №1</a></li>
-      <li><a href="#" onclick="openModalID('Stat2')">Станция №2</a></li>
-      <li><a href="#" onclick="openModalID('M3M')">M3M</a></li>
-    </ul>
-  </nav>
-  <div class="content">
-    <div class="informationMenu">
-      <table class="statusName">
-        <thead>
-        <tr>
-          <th>Статус подключений устройств</th>
-        </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              Беркут
-            </td>
-            <td id="BercutConnectionStatus">
-              Отключено
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Аттенюатор
-            </td>
-            <td id="AttConnectionStatus">
-              Отключено
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Станция №1
-            </td>
-            <td id="Stat1ConnectionStatus">
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Станция №2
-            </td>
-            <td id="Stat2ConnectionStatus">
-            </td>
-          </tr>
-          <tr>
-            <!-- <td>
-              M3M
-            </td>
-            <td id="M3MConnectionStatus">
-              Отключено
-            </td> -->
-          </tr>
-        </tbody>
-      </table>
-    <div class="devicesInfo">
-      <table class="statusName">
-        <thead>
-        <tr>
-          <th>Параметры</th>
-        </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              Станция №1
-            </td>
-            <td>
-            </td>
-            <td class ="StationMargin2">
-              Станция №2
-            </td>
-            <td>
-            </td>
-            <td>
-             Аттенюатор
-            </td>
-          </tr>
-          <tr>
-            <td>
-              IP адрес:
-            </td>
-            <td class="Params" id="Stat1IpAddress">
-            </td>
-            <td class ="StationMargin2" >
-              IP адрес:
-            </td>
-            <td class="Params" id="Stat2IpAddress">
-            </td>
-            <td id="AttTypeConnection">Подключение: 
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Частота:
-            </td>
-            <td class="Params" id="Stat1Frequency">
-            </td>
-            <td class ="StationMargin2" >
-              Частота:
-            </td>
-            <td class="Params" id="Stat2Frequency">
-            </td>
-            <td id="Attenuation">Ослабление: 
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Режим работы:
-            </td>
-            <td class="Params" id="Stat1Regime">
-            </td>
-            <td class ="StationMargin2" >
-              Режим работы:
-            </td>
-            <td class="Params" id="Stat2Regime">
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Ширина полосы:
-            </td>
-            <td class="Params" id="Stat1Bandwidth">
-            </td>
-            <td class ="StationMargin2" >
-              Ширина полосы:
-            </td>
-            <td class="Params" id="Stat2Bandwidth">
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <hr>  
-  <div class="BercutOutput">
-      <pre id="responseBlock">Вывод беркута:</pre>
-    </div>
-  </div>
-  <div id="Bercut" class="Bercut">
-    <div class="Bercut-content">
-      <span class="close" onclick="closeModalID('Bercut')">&times;</span>
-      <h2>Введите данные</h2>
-      <form>
-        <label for="inputField">Команда:</label>
-        <input type="text" id="inputField"><br>
-        <div class="buttons-wrap">
-          <button type="button" class="btn btn-primary" id="connectButtonBercut" onclick="connectBercut()">Подключиться</button>
-          <button type="button" class="btn btn-success pressButton" id="pressButtonBercut" onclick="sendCommandToBackend(); closeModalID('Bercut');">Отправить</button>
-          <button type="button" class="btn btn-danger" id="disconnectButtonBercut" onclick="disconnectBercut()">Отключиться</button>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div id="Att" class="Bercut">
-    <div class="Bercut-content">
-      <span class="close" onclick="closeModalID('Att')">&times;</span>
-      <h2>Введите данные</h2>
-      <form>
-        <label for="inputAtt">Ослабление:</label>
-        <input type="text" id="inputAtt"><br>
-        <div class="buttons-wrap">
-          <button type="button" class="btn btn-success pressButton" id="pressButtonAtt" onclick="sendAtt(); closeModalID('Att');">Отправить</button>
-          <button type="button" class="btn btn-primary" id="connectButtonAtt" onclick="connectAtt()">Подключиться</button>
-          <div class="switch-container">
-            <label class="switch">
-              <input type="checkbox" id="connectionSwitch">
-              <span class="slider"></span>
-            </label>
-            <span id="connectionType">COM-port</span>
-          </div>
-          <div id="indicator-circle"></div>
-          <div class="connection-status">Не подключено</div>
-        </div>      
-      </form>
-    </div>
-  </div>
-    <div id="Stat1" class="Bercut">
-    <div class="Bercut-content">
-      <span class="close" onclick="closeModalID('Stat1')">&times;</span>
-      <h2>Введите данные</h2>
-      <form>
-        <div class="form-group">
-          <label for="inputFrequency1">Частота станции, МГц</label>
-          <input type="text" id="inputFrequency1" placeholder="Введите частоту" autofocus>
-        </div>
-        <div class="form-group">
-          <label for="selectionRegime1">Выберите режим работы
-              <select id="selectionRegime1">
-                  <option value="1">База</option>
-                  <option value="0">Абонент</option>
-              </select>
-          </label>
-        </div>
-        <div class="form-group">
-          <label for="selectionBandwidth1">Выберите ширину полосы
-              <select id="selectionBandwidth1">
-                  <option value="3">10 МГц</option>
-                  <option value="5">20 МГц</option>
-              </select>
-          </label>
-        </div>
-          <button type="button" class="btn btn-success pressButton" id="ExecuteStat1" onclick="sendStat1(); closeModalID('Stat1');">Отправить</button>
-      </form>
-    </div>
-  </div>
-    <div id="Stat2" class="Bercut">
-    <div class="Bercut-content">
-      <span class="close" onclick="closeModalID('Stat2')">&times;</span>
-      <h2>Введите данные</h2>
-      <form>
-        <div class="form-group">
-          <label for="inputFrequency2">Частота станции, МГц</label>
-          <input type="text" id="inputFrequency2" placeholder="Введите частоту" autofocus>
-        </div>
-        <div class="form-group">
-          <label for="selectionRegime2">Выберите режим работы
-              <select id="selectionRegime2">
-                  <option value="1">База</option>
-                  <option value="0">Абонент</option>
-              </select>
-          </label>
-        </div>
-        <div class="form-group">
-          <label for="selectionBandwidth2">Выберите ширину полосы
-              <select id="selectionBandwidth2">
-                  <option value="3">10 МГц</option>
-                  <option value="5">20 МГц</option>
-              </select>
-          </label>
-        </div>
-        <button type="button" class="btn btn-success pressButton" id="ExecuteStat2" onclick="sendStat2(); closeModalID('Stat2');">Отправить</button>
-      </form>
-    </div>
-  </div>
-  <div id="M3M" class="Bercut">
-    <div class="Bercut-content">
-      <span class="close" onclick="closeModalID('M3M')">&times;</span>
-      <h2>Введите данные</h2>
-      <form>
-        <p>Значение: <span><input type="text" span id="outputPowerValue"></span></p>
-        <button type="button" class="btn btn-primary pressButton" id="viewOutputPower" onclick="getOutputPower();">Просмотр</button>
-      </form>
-    </div>
-  </div>
-  <script type="text/javascript" src="Site_script.js"></script>
-</body>
-</html>
+function openModalID(ModalID) {
+  document.getElementById(ModalID).style.display = "block";
+}
+
+function closeModalID(ModalID) {
+  document.getElementById(ModalID).style.display = "none";
+}
+
+ const inputField = document.getElementById('inputField'); 
+ const disconnectButtonBercut = document.getElementById('disconnectButtonBercut');
+ const connectButtonBercut = document.getElementById('connectButtonBercut');
+ const pressButtonBercut_display = document.getElementById("pressButtonBercut");
+
+ const indicatorCircle = document.getElementById('indicator-circle');
+ const connectionStatus = document.querySelector('.connection-status');
+ const connectButtonAtt = document.getElementById('connectButtonAtt');
+ const connectionSwitch = document.getElementById('connectionSwitch');
+ const connectionType = document.getElementById('connectionType');
+ const pressButtonAtt = document.getElementById('pressButtonAtt');
+
+ const BercutConnectionStatus = document.getElementById('BercutConnectionStatus');
+ const AttConnectionStatus = document.getElementById('AttConnectionStatus');
+
+ const AttTypeConnection = document.getElementById('AttTypeConnection');
+ const Attenuation= document.getElementById('Attenuation');
+
+ const Stat1IpAddress = document.getElementById("Stat1IpAddress");
+ const Stat1Frequency = document.getElementById("Stat1Frequency");
+ const Stat1Regime = document.getElementById("Stat1Regime");
+ const Stat1Bandwidth = document.getElementById("Stat1Bandwidth");
+
+ const Stat2IpAddress = document.getElementById("Stat2IpAddress");
+ const Stat2Frequency = document.getElementById("Stat2Frequency");
+ const Stat2Regime = document.getElementById("Stat2Regime");
+ const Stat2Bandwidth = document.getElementById("Stat2Bandwidth");
+
+
+connectionSwitch.addEventListener('change', function() {
+  if (this.checked) {
+    connectionType.textContent = 'Ethernet';
+    console.log('Выбрано подключение через Ethernet');
+  } else {
+    connectionType.textContent = 'COM-port';
+    console.log('Выбрано подключение через COM-port');
+  }
+});
+
+function connectAtt() {
+  const xhr = new XMLHttpRequest();
+
+  const selectedConnectionType = connectionType.textContent;
+  const url = `/api/connection-status${selectedConnectionType}`;
+
+  xhr.open('GET', url, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 400) {
+        if (connectionType.textContent == 'Ethernet') {
+        AttTypeConnection.textContent = 'Подключение: Ethernet';
+        AttConnectionStatus.style.color = '#28a745';
+        AttConnectionStatus.textContent = 'Подключено'
+        indicatorCircle.style.backgroundColor = '#28a745';
+        connectionStatus.textContent = 'Подключено';
+        connectionSwitch.disabled = true;
+        connectButtonAtt.style.display = 'none';
+        pressButtonAtt.style.display = 'flex';
+      } else if (connectionType.textContent == 'COM-port') {
+        AttTypeConnection.textContent = 'Подключение: COM-port';
+        AttConnectionStatus.style.color = '#28a745';
+        AttConnectionStatus.textContent = 'Подключено'
+        indicatorCircle.style.backgroundColor = '#28a745';
+        connectionStatus.textContent = 'Подключено';
+        connectionSwitch.disabled = true;
+        connectButtonAtt.style.display = 'none';
+        pressButtonAtt.style.display = 'flex';
+      }
+        else {
+        AttTypeConnection.textContent = 'Подключение:';
+        AttConnectionStatus.style.color = '#ff0000';
+        AttConnectionStatus.textContent = 'Отключено'
+        indicatorCircle.style.backgroundColor = '#ff0000';
+        connectionStatus.textContent = 'Не подключено';
+        connectionSwitch.disabled = false;
+        connectButtonAtt.style.display = 'flex';
+        pressButtonAtt.style.display = 'none';
+        }
+    } else {
+      console.error('Ошибка запроса: ', xhr.statusText);
+    }
+  };
+
+  xhr.onerror = function () {
+    console.error('Ошибка сетевого запроса.');
+  };
+
+  xhr.send();
+}
+
+//setInterval(connectAtt, 2000);
+
+function connectBercut() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/bert/connect', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            BercutConnectionStatus.style.color = '#28a745';
+            BercutConnectionStatus.textContent = 'Подключено' //
+            connectButtonBercut.style.display = 'none';
+            pressButtonBercut_display.style.display = 'flex';
+            disconnectButtonBercut.style.display = 'flex';
+            console.log("Статус отключения: ",xhr.response);
+        } else if (xhr.status >= 400) {
+            console.error("Ошибка запроса подключения: ", xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.log(xhr.response);
+    };
+
+    xhr.send();
+}
+
+function disconnectBercut() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/bert/disconnect', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            BercutConnectionStatus.style.color = '#ff0000';
+            BercutConnectionStatus.textContent = 'Отключено'
+            connectButtonBercut.style.display = 'flex';
+            pressButtonBercut_display.style.display = 'none';
+            disconnectButtonBercut.style.display = 'none';
+            console.log("Статус подключения: ", xhr.response);
+        } else if (xhr.status >= 400) {
+            console.error("Ошибка запроса отключения: ", xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.log(xhr.response);
+    };
+
+    xhr.send();
+}
+
+function sendCommandToBackend() {
+    const inputField = document.getElementById("inputField");
+    const command = inputField.value;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/bert/process', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log(xhr.response);
+            const responseBlock = document.getElementById("responseBlock");
+            responseBlock.innerText = xhr.response;
+        } else if (xhr.status >= 400) {
+            console.error("Ошибка запроса: ", xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.log(xhr.response);
+    };
+
+    xhr.send(JSON.stringify({ command: command }));
+    // inputField.value = "";
+}
+
+function sendStat1() {
+    const inputFrequency1 = document.getElementById("inputFrequency1");
+    const selectedRegime1 = document.getElementById('selectionRegime1');
+    const selectedBandwidth1 = document.getElementById('selectionBandwidth1');
+    const stat1ConnectionStatus = document.getElementById('Stat1ConnectionStatus');
+    let frequency = inputFrequency1.value;
+    let regime = selectedRegime1.value;
+    let bandwidth = selectedBandwidth1.value;
+    let InputedParams = [
+        {
+            oid: "Frequncy",
+            value: frequency
+        },
+        {
+            oid: "Mode",
+            value: regime
+        },
+        {
+            oid: "Width",
+            value: bandwidth
+        }
+    ]
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/snmp/process', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            Stat1IpAddress.textContent = xhr.response;
+            stat1ConnectionStatus.textContent = "Успешно";
+            stat1ConnectionStatus.style.color = "#28a745";
+            Stat1Frequency.textContent = frequency + " МГц";
+            Stat1Regime.textContent = (regime ? "База" : "Абонент");
+            Stat1Bandwidth.textContent = (bandwidth > 3 ? "20 МГц" : "10 МГц");
+            console.log(xhr.response);
+        } else if (xhr.status >= 400) {
+            stat1ConnectionStatus.textContent = "Ошибка";
+            stat1ConnectionStatus.style.color = "#ff0000";
+            console.error("Ошибка запроса: ", xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.log(xhr.response);
+    };
+    xhr.send(JSON.stringify(InputedParams));
+}
+
+function sendStat2() {
+    const inputFrequency2 = document.getElementById("inputFrequency2");
+    const selectedRegime2 = document.getElementById('selectionRegime2');
+    const selectedBandwidth2 = document.getElementById('selectionBandwidth2');
+    const stat2ConnectionStatus = document.getElementById('Stat2ConnectionStatus');
+    let frequency = inputFrequency2.value;
+    let regime = selectedRegime2.value;
+    let bandwidth = selectedBandwidth2.value;
+    let InputedParams = [
+        {
+            oid: "Frequncy",
+            value: frequency
+        },
+        {
+            oid: "Mode",
+            value: regime
+        },
+        {
+            oid: "Width",
+            value: bandwidth
+        }
+    ]
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/snmp/process', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log(regime);
+            Stat2IpAddress.textContent = xhr.response;
+            stat2ConnectionStatus.textContent = "Успешно";
+            stat2ConnectionStatus.style.color = "#28a745";
+            Stat2Frequency.textContent = frequency + " МГц";
+            Stat2Regime.textContent = (regime == true ? "База" : "Абонент");;
+            Stat2Bandwidth.textContent = (bandwidth > 3 ? "20 МГц" : "10 МГц");
+            console.log(xhr.response);
+        } else if (xhr.status >= 400) {
+            stat2ConnectionStatus.textContent = "Ошибка";
+            stat2ConnectionStatus.style.color = "#ff0000";
+            console.error("Ошибка запроса: ", xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.log(xhr.response);
+    };
+
+    xhr.send(JSON.stringify(InputedParams));
+}
+
+function sendAtt() {
+    const inputAtt = document.getElementById("inputAtt");
+    const Attenuation = document.getElementById("Attenuation");
+    let Att = [inputAtt.value];
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/att', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            Attenuation.textContent = "Ослабление: " + Att + " Дб";
+            console.log(xhr.response);
+        } else if (xhr.status >= 400) {
+            console.error("Ошибка запроса: ", xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.log(xhr.response);
+    };
+
+    xhr.send(JSON.stringify(Att));
+}
+
+function getOutputPower() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/M3M/output-power', true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.response);
+      const outputPowerValue = document.getElementById('outputPowerValue');
+      outputPowerValue.textContent = response + " дБ";
+    } else {
+      console.error('Ошибка получения значения мощности:', xhr.status);
+    }
+  };
+
+  xhr.onerror = function() {
+    console.error('Ошибка получения значения мощности:', xhr.status);
+  };
+
+  xhr.send();
+}
