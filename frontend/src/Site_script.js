@@ -203,6 +203,7 @@ function sendStat1() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
+            Stat1IpAddress.textContent = xhr.response;
             stat1ConnectionStatus.textContent = "Успешно";
             stat1ConnectionStatus.style.color = "#28a745";
             Stat1Frequency.textContent = frequency + " МГц";
@@ -251,6 +252,7 @@ function sendStat2() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
+            Stat2IpAddress.textContent = xhr.response;
             stat2ConnectionStatus.textContent = "Успешно";
             stat2ConnectionStatus.style.color = "#28a745";
             Stat2Frequency.textContent = frequency + " МГц";
