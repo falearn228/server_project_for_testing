@@ -25,6 +25,10 @@ td {
   padding: 5px;
 }
 
+.labelIP {
+  margin-left: 10px;
+}
+
 .devicesInfo {
   margin-left: 150px;
 }
