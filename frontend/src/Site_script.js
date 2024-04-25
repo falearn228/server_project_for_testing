@@ -28,12 +28,13 @@ function closeModalID(ModalID) {
  const Stat1Frequency = document.getElementById("Stat1Frequency");
  const Stat1Regime = document.getElementById("Stat1Regime");
  const Stat1Bandwidth = document.getElementById("Stat1Bandwidth");
+ const inputIpStat1 = document.getElementById("inputIP1");
 
  const Stat2IpAddress = document.getElementById("Stat2IpAddress");
  const Stat2Frequency = document.getElementById("Stat2Frequency");
  const Stat2Regime = document.getElementById("Stat2Regime");
  const Stat2Bandwidth = document.getElementById("Stat2Bandwidth");
-
+ const inputIpStat2 = document.getElementById("inputIP2");
 
 connectionSwitch.addEventListener('change', function() {
   if (this.checked) {
@@ -179,6 +180,7 @@ function sendStat1() {
     const selectedRegime1 = document.getElementById('selectionRegime1');
     const selectedBandwidth1 = document.getElementById('selectionBandwidth1');
     const stat1ConnectionStatus = document.getElementById('Stat1ConnectionStatus');
+    const IP_address = inputIpStat1.value;
     let frequency = inputFrequency1.value;
     let regime = selectedRegime1.value;
     let bandwidth = selectedBandwidth1.value;
@@ -194,6 +196,9 @@ function sendStat1() {
         {
             oid: "Width",
             value: bandwidth
+        },
+        {
+            IP: IP_address
         }
     ]
 
@@ -203,7 +208,7 @@ function sendStat1() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            Stat1IpAddress.textContent = xhr.response;
+            Stat1IpAddress.textContent = IP_address;
             stat1ConnectionStatus.textContent = "Успешно";
             stat1ConnectionStatus.style.color = "#28a745";
             Stat1Frequency.textContent = frequency + " МГц";
@@ -228,6 +233,7 @@ function sendStat2() {
     const selectedRegime2 = document.getElementById('selectionRegime2');
     const selectedBandwidth2 = document.getElementById('selectionBandwidth2');
     const stat2ConnectionStatus = document.getElementById('Stat2ConnectionStatus');
+    const IP_address = inputIpStat2.value;
     let frequency = inputFrequency2.value;
     let regime = selectedRegime2.value;
     let bandwidth = selectedBandwidth2.value;
@@ -243,6 +249,9 @@ function sendStat2() {
         {
             oid: "Width",
             value: bandwidth
+        },
+        {
+            IP: IP_address
         }
     ]
 
@@ -252,8 +261,7 @@ function sendStat2() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            console.log(regime);
-            Stat2IpAddress.textContent = xhr.response;
+            Stat2IpAddress.textContent = IP_address;
             stat2ConnectionStatus.textContent = "Успешно";
             stat2ConnectionStatus.style.color = "#28a745";
             Stat2Frequency.textContent = frequency + " МГц";
@@ -285,7 +293,7 @@ function sendAtt() {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            Attenuation.textContent = "Ослабление: " + Att + " Дб";
+            Attenuation.textContent = "Ослабление: " + Att + " дБ";
             console.log(xhr.response);
         } else if (xhr.status >= 400) {
             console.error("Ошибка запроса: ", xhr.status);
@@ -320,3 +328,34 @@ function getOutputPower() {
 
   xhr.send();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  let ipAddressInputs = document.getElementsByClassName('ip-address');
+
+  for (let i = 0; i < ipAddressInputs.length; i++) {
+    let ipAddressInput = ipAddressInputs[i];
+
+    ipAddressInput.addEventListener('input', function(e) {
+      let value = e.target.value;
+      value = value.replace(/[^0-9.]/g, '');
+      
+      let octets = value.split('.');
+      for (let j = 0; j < octets.length; j++) {
+        if (octets[j] !== '') {
+          octets[j] = parseInt(octets[j]);
+          if (isNaN(octets[j]) || octets[j] < 0 || octets[j] > 255) {
+            octets[j] = '255';
+          }
+        }
+      }
+      
+      e.target.value = octets.join('.');
+    });
+
+    ipAddressInput.addEventListener('keydown', function(e) {
+      if (e.key === '.' && (e.target.value === '' || e.target.value.endsWith('.'))) {
+        e.preventDefault();
+      }
+    });
+  }
+});
