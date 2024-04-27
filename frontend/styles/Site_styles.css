@@ -9,6 +9,10 @@ header {
   padding: 6px;
 }
 
+#disconnectButtonAtt {
+  display: none;
+}
+
 .informationMenu {
   display: flex;
 }

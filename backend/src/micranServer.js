@@ -13,6 +13,37 @@ const frontPath = path.join(__dirname + '../../../frontend');
 app.use(express.static('/frontend/public'));
 
 //ATT модуль
+app.post('/att/setValue', (req, res) => {
+  const attValue = req.body.value;
+  attModule.setAttenuatorValue(attValue);
+  
+  res.status(200).send(attModule.getAttenuatorValue());
+});
+
+app.get('/att/connect', (req, res) => {
+  try{
+    attModule.connectATT();
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Error', error);
+    res.status(500).send('Error occurred');
+  }
+
+});
+app.get('/att/getValue', (req, res) => {
+  res.status(200).send(attModule.getAttenuatorValue());
+});
+app.get('/att/disconnect', (req, res) => {
+  try{
+    attModule.destroyATT();
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Error', error);
+    res.status(500).send('Error occurred');
+  }
+
+});
+
 
 //ATT модуль
 
@@ -60,20 +91,20 @@ try{
 });
 
 app.get('/bert/connect', (req, res) => {
-berkutModule.connectSSH();
-res.sendStatus(200);
+  berkutModule.connectSSH();
+  res.sendStatus(200);
 });
 
 app.get('/bert/disconnect', async (req, res) => {
-const command = 'exit';
-try{
-await berkutModule.sendCommand(command);
-const output = berkutModule.getOutput();
-res.sendStatus(200);
-} catch (error) {
-console.error('Error', error);
-res.status(500).send('Error occurred');
-}
+  const command = 'exit';
+  try{
+  await berkutModule.sendCommand(command);
+  const output = berkutModule.getOutput();
+  res.sendStatus(200);
+  } catch (error) {
+  console.error('Error', error);
+  res.status(500).send('Error occurred');
+  }
 
 });
 //Беркут модуль
@@ -90,6 +121,10 @@ app.get("/Site_styles.css", (req, res) =>{
 
 app.get("/Site_script.js", (req, res) =>{
   res.sendFile("/Site_script.js", {root: path.join(frontPath, 'src')});
+});
+
+app.get("/18c04e70df67915d324cd6e02dac19c0.png", (req, res) =>{
+  res.sendFile("/18c04e70df67915d324cd6e02dac19c0.png", {root: path.join(frontPath, 'public')});
 });
 //Основа сайта
 

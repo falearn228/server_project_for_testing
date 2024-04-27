@@ -1,35 +1,55 @@
 const net = require('net');
+let client;
+const output;
 
-// Устанавливаем параметры подключения
-const HOST = '169.254.0.160'; // IP-адрес или хостнейм вашего устройства
-const PORT = 5025; // Порт вашего устройства
+function connectATT() {
+    // Устанавливаем параметры подключения
+    const HOST = '169.254.0.160'; // IP-адрес или хостнейм вашего устройства
+    const PORT = 5025; // Порт вашего устройства
+    client = new net.Socket();
+    // Создаем экземпляр сокета TCP
+    client.connect(PORT, HOST, function() {
+      // Отправляем запрос *IDN? на устройство
+      // client.write(':INP:ATT?\n');
+    });
+    client.on('data', function(data) {
+        output = data;
+    });
 
-// Создаем экземпляр сокета TCP
-const client = new net.Socket();
+    // Обработчик события в случае разрыва соединения
+    client.on('close', function() {
+      console.log('Соединение с устройством закрыто');
+    });
 
-// Подключаемся к устройству
-client.connect(PORT, HOST, function() {
-    console.log('Успешное подключение к устройству');
-    // Отправляем запрос *IDN? на устройство
+    // Обработчик события в случае ошибки подключения
+    client.on('error', function(err) {
+      console.error('Ошибка при подключении к устройству:', err);
+    });
+
+}
+
+function destroyATT() {
+    client.end();
+}
+
+function getAttenuatorValue() {
     client.write(':INP:ATT?\n');
-    
-});
+    return parseInt(output).toString();
+}
 
-// Обработчик события при получении данных от устройства
-client.on('data', function(data) {
-    console.log('Получены данные от устройства: ', parseInt(data));
-    // Дальнейшая обработка полученных данных
-    
-});
+function setAttenuatorValue(attValue) {
+    client.write(`:INP:ATT ${attValue.toString()}\n`);
+}
 
-// Обработчик события в случае разрыва соединения
-client.on('close', function() {
-    console.log('Соединение с устройством закрыто');
 
-});
+connectATT();
+setAttenuatorValue(25);
+console.log(getAttenuatorValue())
+// destroyATT();
 
-// Обработчик события в случае ошибки подключения
-client.on('error', function(err) {
-    console.error('Ошибка при подключении к устройству:', err);
-
-});
+module.exports = {
+    connectATT,
+    getAttenuatorValue,
+    setAttenuatorValue,
+    destroyATT,
+};

@@ -23,6 +23,7 @@ function closeModalID(ModalID) {
 
  const AttTypeConnection = document.getElementById('AttTypeConnection');
  const Attenuation= document.getElementById('Attenuation');
+ const disconnectButtonAtt = document.getElementById('disconnectButtonAtt');
 
  const Stat1IpAddress = document.getElementById("Stat1IpAddress");
  const Stat1Frequency = document.getElementById("Stat1Frequency");
@@ -50,7 +51,7 @@ function connectAtt() {
   const xhr = new XMLHttpRequest();
 
   const selectedConnectionType = connectionType.textContent;
-  const url = `/api/connection-status${selectedConnectionType}`;
+  const url = `/att/connect`;
 
   xhr.open('GET', url, true);
   xhr.setRequestHeader('Content-Type', 'application/json');
@@ -65,6 +66,7 @@ function connectAtt() {
         connectionSwitch.disabled = true;
         connectButtonAtt.style.display = 'none';
         pressButtonAtt.style.display = 'flex';
+        disconnectButtonAtt.style.display = 'flex';
       } else if (connectionType.textContent == 'COM-port') {
         AttTypeConnection.textContent = 'Подключение: COM-port';
         AttConnectionStatus.style.color = '#28a745';
@@ -84,6 +86,7 @@ function connectAtt() {
         connectionSwitch.disabled = false;
         connectButtonAtt.style.display = 'flex';
         pressButtonAtt.style.display = 'none';
+        disconnectButtonAtt.style.display = 'none';
         }
     } else {
       console.error('Ошибка запроса: ', xhr.statusText);
@@ -97,6 +100,88 @@ function connectAtt() {
   xhr.send();
 }
 
+function disconnectAtt() {
+  const xhr = new XMLHttpRequest();
+  const url = `/att/disconnect`;
+
+  xhr.open('GET', url, true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 400) {
+        if (connectionType.textContent == 'Ethernet') {
+        AttTypeConnection.textContent = 'Подключение:';
+        AttConnectionStatus.style.color = '#ff0000';
+        AttConnectionStatus.textContent = 'Отключено'
+        indicatorCircle.style.backgroundColor = '#ff0000';
+        connectionStatus.textContent = 'Не подключено';
+        connectButtonAtt.style.display = 'flex';
+        pressButtonAtt.style.display = 'none';
+        disconnectButtonAtt.style.display = 'none';
+      } 
+        else {
+        AttTypeConnection.textContent = 'Подключение: Ethernet';
+        AttConnectionStatus.style.color = '#28a745';
+        AttConnectionStatus.textContent = 'Подключено'
+        indicatorCircle.style.backgroundColor = '#28a745';
+        connectionStatus.textContent = 'Подключено';
+        connectButtonAtt.style.display = 'none';
+        pressButtonAtt.style.display = 'flex';
+        disconnectButtonAtt.style.display = 'flex';
+        }
+    } else {
+      console.error('Ошибка запроса: ', xhr.statusText);
+    }
+  };
+
+  xhr.onerror = function () {
+    console.error('Ошибка сетевого запроса.');
+  };
+
+  xhr.send();
+}
+
+function sendAtt() {
+    const inputAtt = document.getElementById("inputAtt");
+    const Attenuation = document.getElementById("Attenuation");
+    let Att = inputAtt.value;
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/att/setValue', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log(xhr.response);
+        } else if (xhr.status >= 400) {
+            console.error("Ошибка запроса: ", xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.log(xhr.response);
+    };
+    xhr.send(JSON.stringify({ value: Att }));
+}
+
+function getAtt() {
+    const Attenuation = document.getElementById("Attenuation");
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/att/getValue', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            Attenuation.innerText = "Ослабление: " + xhr.response + " дБ";
+            console.log(xhr.response);
+        } else if (xhr.status >= 400) {
+            console.error("Ошибка запроса: ", xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.log(xhr.response);
+    };
+    xhr.send();
+}
 //setInterval(connectAtt, 2000);
 
 function connectBercut() {
@@ -280,31 +365,6 @@ function sendStat2() {
     };
 
     xhr.send(JSON.stringify(InputedParams));
-}
-
-function sendAtt() {
-    const inputAtt = document.getElementById("inputAtt");
-    const Attenuation = document.getElementById("Attenuation");
-    let Att = [inputAtt.value];
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/att', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            Attenuation.textContent = "Ослабление: " + Att + " дБ";
-            console.log(xhr.response);
-        } else if (xhr.status >= 400) {
-            console.error("Ошибка запроса: ", xhr.status);
-        }
-    };
-
-    xhr.onerror = function() {
-        console.log(xhr.response);
-    };
-
-    xhr.send(JSON.stringify(Att));
 }
 
 function getOutputPower() {
