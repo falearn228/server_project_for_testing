@@ -9,10 +9,6 @@ header {
   padding: 6px;
 }
 
-#disconnectButtonAtt {
-  display: none;
-}
-
 .informationMenu {
   display: flex;
 }
@@ -21,12 +17,23 @@ header {
   font-weight: bold;
 }
 
+.labels {
+  margin-right: 10px;
+}
+
+.Center-Express-Test {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 th {
   padding-bottom: 5px
 }
 
 td {
-  padding: 5px;
+  padding-top: 10px;
+  padding-right: 10px;
 }
 
 .labelIP {
@@ -37,12 +44,13 @@ td {
   margin-left: 150px;
 }
 
-.StationMargin2 {
+/* .StationMargin2 {
   padding-left: 50px;
-}
+} */
 
 .statusName, .devicesInfo {
-  padding: 5px;
+  padding: 10px;
+  text-align: left;
 }
 
 #BercutConnectionStatus, #AttConnectionStatus {
@@ -50,61 +58,17 @@ td {
   font-weight: bold;
 }
 
+#statConnectionStatus, #M3MConnectionStatus {
+  font-weight: bold;
+}
+
 .form-group {
   padding: 3px;
-}
-
-.switch-container {
-  display: flex;
-  align-items: center;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .4s;
-  border-radius: 34px;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
+  margin-bottom: 20px;
 }
 
 .btn {
+  font-size: 2vw;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -118,10 +82,6 @@ input:checked + .slider:before {
   color: #fff;
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
-
 .btn-primary:hover {
   background-color: #0056b3;
 }
@@ -129,8 +89,6 @@ input:checked + .slider:before {
 .btn-success {
   background-color: #28a745;
   color: #fff;
-  font-size: 18px;
-  padding: 12px 24px;
 }
 
 .btn-success:hover {
@@ -146,16 +104,8 @@ input:checked + .slider:before {
   background-color: #a71d2a;
 }
 
-#disconnectButtonBercut {
-    display: none;
-}
-
-#pressButtonAtt {
+#pressButtonAtt, #pressButtonBercut, #disconnectButtonAtt, #disconnectButtonBercut {
   display: none;
-}
-
-#pressButtonBercut {
-    display: none;
 }
 
 .buttons-wrap {
@@ -165,13 +115,9 @@ input:checked + .slider:before {
     gap: 10px;
 }
 
-.pressButton {
-    padding: 5px;
-    margin-top: 5px;
-}
-
 .BercutOutput {
   display: block;
+  padding-left: 5px;
 }
 
 #responseBlock {
@@ -227,6 +173,10 @@ input:checked + .slider:before {
   width: 60%;
 }
 
+.Testing-content {
+  width: 50%;
+}
+
 .Bercut-content .close {
   color: #aaa;
   float: right;
@@ -262,7 +212,6 @@ input:checked + .slider:before {
 
 .content {
   margin-left: 12%;
-  padding: 20px;
 }
 
 #outputPowerValue {
@@ -271,11 +220,7 @@ input:checked + .slider:before {
   color: black;
 }
 
-#viewOutputPower {
-  padding: 10px;
-}
-
-#indicator-circle {
+#indicator-circle-Att, #indicator-circle-M3M, #indicator-circle-Bercut {
   margin-top: 9px;
   margin-left: 10px;
   width: 20px;
