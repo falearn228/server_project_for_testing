@@ -17,10 +17,11 @@
   <hr>
   <nav class="sidebar">
     <ul>
+      <li><a href="#" onclick="openModalID('Testing')">Тестирование</a></li>
       <li><a href="#" onclick="openModalID('Bercut')">Беркут</a></li>
       <li><a href="#" onclick="openModalID('Att')">Аттенюатор</a></li>
-      <li><a href="#" onclick="openModalID('Stat1')">Станция №1</a></li>
-      <li><a href="#" onclick="openModalID('Stat2')">Станция №2</a></li>
+      <li><a href="#" onclick="openModalID('StationIPSettings')">Настройка IP адресов станций</a></li>
+      <li><a href="#" onclick="openModalID('StatSettings')">Настройка cтанций</a></li>
       <li><a href="#" onclick="openModalID('M3M')">M3M</a></li>
     </ul>
   </nav>
@@ -51,25 +52,24 @@
           </tr>
           <tr>
             <td>
-              Станция №1
+              Станции
             </td>
-            <td id="Stat1ConnectionStatus">
+            <td id="statConnectionStatus">
             </td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td>
               Станция №2
             </td>
             <td id="Stat2ConnectionStatus">
             </td>
-          </tr>
+          </tr> -->
           <tr>
-            <!-- <td>
+            <td>
               M3M
             </td>
             <td id="M3MConnectionStatus">
-              Отключено
-            </td> -->
+            </td>
           </tr>
         </tbody>
       </table>
@@ -83,69 +83,84 @@
         <tbody>
           <tr>
             <td>
-              Станция №1
+            <strong>Станции</strong>
             </td>
-            <td>
+            <!-- <td>
             </td>
-            <td class ="StationMargin2">
+             <td class ="StationMargin2">
               Станция №2
+            </td> --> 
+            <td>
+            </td>
+            <td>
+            <strong>Аттенюатор</strong>
             </td>
             <td>
             </td>
             <td>
-             Аттенюатор
+            <strong>M3M</strong>
             </td>
           </tr>
           <tr>
             <td>
-              IP адрес:
+              IP адрес БАЗЫ:
             </td>
-            <td class="Params" id="Stat1IpAddress">
+            <td class="Params" id="inputIP-BASE-value">
             </td>
-            <td class ="StationMargin2" >
+            <!-- <td class ="StationMargin2" >
               IP адрес:
             </td>
             <td class="Params" id="Stat2IpAddress">
-            </td>
+            </td> -->
             <td id="AttTypeConnection">Подключение: 
+            </td>
+            <td>
+            </td>
+            <td id="M3MTypeConnection">Подключение:
             </td>
           </tr>
           <tr>
             <td>
-              Частота:
+              IP адрес АБОНЕНТА:
             </td>
-            <td class="Params" id="Stat1Frequency">
-            </td>
-            <td class ="StationMargin2" >
-              Частота:
-            </td>
-            <td class="Params" id="Stat2Frequency">
+            <td class="Params" id="inputIP-ABONENT-value">
             </td>
             <td id="Attenuation">Ослабление: 
             </td>
+            <td>
+            </td>
+            <td id="M3Moffset">Offset:
+            </td>
           </tr>
           <tr>
-            <td>
-              Режим работы:
+            <td class ="Params" >
+              Частота:
             </td>
-            <td class="Params" id="Stat1Regime">
+            <td class="Params" id="StationFrequency">
             </td>
-            <td class ="StationMargin2" >
+            <!-- <td class ="StationMargin2" >
               Режим работы:
             </td>
             <td class="Params" id="Stat2Regime">
-            </td>
+            </td> -->
           </tr>
           <tr>
             <td>
               Ширина полосы:
             </td>
-            <td class="Params" id="Stat1Bandwidth">
+            <td class="Params" id="StationBandwidth">
             </td>
-            <td class ="StationMargin2" >
+            <!-- <td class ="StationMargin2" >
               Ширина полосы:
             </td>
-            <td class="Params" id="Stat2Bandwidth">
+            <td class="Params" id="StationBandwidth">
+            </td> -->
+          </tr>
+          <tr>
+            <td>
+              Модуляция:
+            </td>
+            <td class="Params" id="StationModulation">
             </td>
           </tr>
         </tbody>
@@ -155,6 +170,42 @@
   <hr>  
   <div class="BercutOutput">
       <pre id="responseBlock">Вывод беркута:</pre>
+  </div>
+  </div>
+  <div id="Testing" class="Bercut">
+    <div class="Bercut-content Testing-content">
+      <span class="close" onclick="closeModalID('Testing')">&times;</span>
+      <h2>Введите данные для расчета затухания в линии</h2>
+      <form>
+        <div class="form-group">
+          <label for="input_SUM_PA">Аттенюаторы ПА1, ПА2:</label>
+          <input type="text" id="input_SUM_PA" class="labels" placeholder="Введите затухание, дБ" autofocus>
+          <!-- ЧЕЛОВЕК ВВОДИТ СУММУ АТТЕНЮАТОРОВ НА СТАНЦИИ, А НЕ ОДНО ЗНАЧЕНИЕ -->
+          <label for ="input_Splitter">Разветвитель:</label>
+          <input type="text" id="input_Splitter" class="labels" placeholder="Введите затухание, дБ">
+          <label for ="input_Cable">Кабель:</label>
+          <input type="text" id="input_Cable" class="labels" placeholder="Введите затухание, дБ">
+          <!-- КАК Я ПОНИМАЮ, ВРОДЕ НУЖНО СКЛАДЫВАТЬ КАБЕЛЬ НЕСКОЛЬКО РАЗ
+          ПРИМЕР = ПА1 + КАБЕЛЬ + РАЗВЕТВИТЕЛЬ + КАБЕЛЬ + М3М. ЧЕЛОВЕК ВВОДИТ
+          ЛИШЬ НОМИНАЛ КАБЕЛЯ.-->
+        </div>
+        <div class="form-group">
+          <label for="output_BASE_to_M3M"><strong>Затухание от БАЗЫ до M3M</strong>:</label>
+          <input type="text" id="output_BASE_to_M3M" readonly>
+        </div>
+        <div class="form-group">
+          <label for="output_BASE_to_ABONENT"><strong>Затухание от БАЗЫ до АБОНЕНТА</strong>:</label>
+          <input type="text" id="output_BASE_to_ABONENT" readonly>
+        </div>
+        <div class="form-group">
+          <label for="output_EXPRESS_TEST"><strong>Вычисленное затухание для АТ</strong>:</label>
+          <input type="text" id="output_EXPRESS_TEST" readonly>
+        </div>
+          <button type="button" class="btn btn-primary" id="Calculate" onclick="Calculate_attenuation()">Вычислить</button>
+          <div class="Center-Express-Test">
+            <button type="button" class="btn btn-success" id="EXPRESS_TEST_press" onclick="EXPRESS_TEST()">Экспресс тест</button>
+          </div>
+      </form>
     </div>
   </div>
   <div id="Bercut" class="Bercut">
@@ -166,8 +217,10 @@
         <input type="text" id="inputField"><br>
         <div class="buttons-wrap">
           <button type="button" class="btn btn-primary" id="connectButtonBercut" onclick="connectBercut()">Подключиться</button>
-          <button type="button" class="btn btn-success pressButton" id="pressButtonBercut" onclick="sendCommandToBackend(); closeModalID('Bercut');">Отправить</button>
+          <button type="button" class="btn btn-success " id="pressButtonBercut" onclick="sendCommandToBackend(); closeModalID('Bercut');">Отправить</button>
           <button type="button" class="btn btn-danger" id="disconnectButtonBercut" onclick="disconnectBercut()">Отключиться</button>
+          <div id="indicator-circle-Bercut"></div>
+          <div class="connection-status" id="connection-status-Bercut">Не подключено</div>
         </div>
       </form>
     </div>
@@ -178,56 +231,67 @@
       <h2>Введите данные</h2>
       <form>
         <label for="inputAtt">Ослабление:</label>
-        <input type="text" id="inputAtt"><br>
+        <input type="text" id="inputAtt" placeholder="Введите затухание, дБ" autofocus><br>
         <div class="buttons-wrap">
-          <button type="button" class="btn btn-success pressButton" id="pressButtonAtt" onclick="sendAtt(); closeModalID('Att');">Отправить</button>
+          <button type="button" class="btn btn-success" id="pressButtonAtt" onclick="sendAtt(); closeModalID('Att');">Отправить</button>
           <button type="button" class="btn btn-primary" id="connectButtonAtt" onclick="connectAtt()">Подключиться</button>
           <button type="button" class="btn btn-danger" id="disconnectButtonAtt" onclick="disconnectAtt()">Отключиться</button>
-          <div class="switch-container">
-            <label class="switch">
-              <input type="checkbox" id="connectionSwitch">
-              <span class="slider"></span>
-            </label>
-            <span id="connectionType">COM-port</span>
-          </div>
-          <div id="indicator-circle"></div>
-          <div class="connection-status">Не подключено</div>
+          <div id="indicator-circle-Att"></div>
+          <div class="connection-status" id="connection-status-Att">Не подключено</div>
         </div>      
       </form>
     </div>
   </div>
-    <div id="Stat1" class="Bercut">
+  <div id="StationIPSettings" class="Bercut">
     <div class="Bercut-content">
-      <span class="close" onclick="closeModalID('Stat1')">&times;</span>
+      <span class="close" onclick="closeModalID('StationIPSettings')">&times;</span>
       <h2>Введите данные</h2>
       <form>
         <div class="form-group">
-          <label for="inputFrequency1">Частота станции, МГц</label>
-          <input type="text" id="inputFrequency1" placeholder="Введите частоту" autofocus>
-          <label for="inputIP1" class="labelIP">IP адрес станции №1</label>
-          <input type="text" class="ip-address" id="inputIP1" placeholder="XXX.XXX.XXX.XXX" maxlength="15">
+          <label for="inputIP-BASE" class="labelIP">IP адрес <strong>Базы</strong>:</label>
+          <input type="text" class="ip-address" id="inputIP-BASE" placeholder="XXX.XXX.XXX.XXX" maxlength="15" autofocus>
+          <label for="inputIP-ABONENT" class="labelIP">IP адрес <strong>Абонента</strong>:</label>
+          <input type="text" class="ip-address" id="inputIP-ABONENT" placeholder="XXX.XXX.XXX.XXX" maxlength="15">
+        </div>
+        <button type="button" class="btn btn-primary" id="ExecuteIP-Station" onclick="stationIPSettings(); closeModalID('StationIPSettings');">Подтвердить</button>
+        <button type="button" class="btn btn-danger" id="Swap-mode" onclick="SwapIPContent()">Сменить роли</button>
+      </form>
+    </div>
+  </div>
+  <div id="StatSettings" class="Bercut">
+    <div class="Bercut-content">
+      <span class="close" onclick="closeModalID('StatSettings')">&times;</span>
+      <h2>Введите данные</h2>
+      <form>
+        <div class="form-group">
+          <label for="inputFrequency">Частота станции, КГц:</label>
+          <input type="text" id="inputFrequency" placeholder="Введите частоту" autofocus>
         </div>
         <div class="form-group">
-          <label for="selectionRegime1">Выберите режим работы
-              <select id="selectionRegime1">
-                  <option value="1">База</option>
-                  <option value="0">Абонент</option>
-              </select>
-          </label>
-        </div>
-        <div class="form-group">
-          <label for="selectionBandwidth1">Выберите ширину полосы
-              <select id="selectionBandwidth1">
+          <label for="selectionBandwidth">Выберите ширину полосы:
+              <select id="selectionBandwidth">
                   <option value="3">10 МГц</option>
                   <option value="5">20 МГц</option>
               </select>
           </label>
         </div>
-          <button type="button" class="btn btn-success pressButton" id="ExecuteStat1" onclick="sendStat1(); closeModalID('Stat1');">Отправить</button>
+        <div class="form-group">
+          <label for="selectionModulation">Выберите модуляцию:
+              <select id="selectionModulation">
+                  <option value="0">qbpska 1/2</option>
+                  <option value="1">qbpska 2/3</option>
+                  <option value="2">qbpska 3/3</option>
+                  <!-- ЗДЕСЬ ПЕРЕПИСАТЬ И ДОПИСАТЬ НУЖНЫЕ МОДУЛЯЦИИ 
+                  ПРОСТО CRTL+C и CTRL+V. В JS скрипте все уже работает.
+                  Значения value изменить на нужные OID'ы-->
+              </select>
+          </label>
+        </div>
+          <button type="button" class="btn btn-success" id="ExecuteStat" onclick="sendStatSettings(); closeModalID('StatSettings');">Отправить</button>
       </form>
     </div>
   </div>
-    <div id="Stat2" class="Bercut">
+  <!-- <div id="Stat2" class="Bercut">
     <div class="Bercut-content">
       <span class="close" onclick="closeModalID('Stat2')">&times;</span>
       <h2>Введите данные</h2>
@@ -235,16 +299,6 @@
         <div class="form-group">
           <label for="inputFrequency2">Частота станции, МГц</label>
           <input type="text" id="inputFrequency2" placeholder="Введите частоту" autofocus>
-          <label for="inputIP2" class="labelIP">IP адрес станции №2</label>
-          <input type="text" class="ip-address" id="inputIP2" placeholder="XXX.XXX.XXX.XXX" maxlength="15">
-        </div>
-        <div class="form-group">
-          <label for="selectionRegime2">Выберите режим работы
-              <select id="selectionRegime2">
-                  <option value="1">База</option>
-                  <option value="0">Абонент</option>
-              </select>
-          </label>
         </div>
         <div class="form-group">
           <label for="selectionBandwidth2">Выберите ширину полосы
@@ -254,17 +308,25 @@
               </select>
           </label>
         </div>
-        <button type="button" class="btn btn-success pressButton" id="ExecuteStat2" onclick="sendStat2(); closeModalID('Stat2');">Отправить</button>
+        <button type="button" class="btn btn-success" id="ExecuteStat2" onclick="sendStat2(); closeModalID('Stat2');">Отправить</button>
       </form>
     </div>
-  </div>
-  <div id="M3M" class="Bercut">
+  </div> -->
+  <div id="M3M" class="Bercut"> 
     <div class="Bercut-content">
       <span class="close" onclick="closeModalID('M3M')">&times;</span>
       <h2>Введите данные</h2>
       <form>
-        <p>Значение: <strong id="outputPowerValue"></strong></p>
-        <button type="button" class="btn btn-primary pressButton" id="viewOutputPower" onclick="getOutputPower()">Просмотр</button>
+        
+      </form>
+      <form>
+        <label for="inputAtt">Компенсация ослабления:</label>
+        <input type="text" id="inputM3M" placeholder="Введите затухание, дБ" autofocus><br>
+        <div class="buttons-wrap">
+          <button type="button" class="btn btn-success" id="pressButtonM3M" onclick="sendM3M(); getValueM3M(); closeModalID('M3M');">Отправить</button>
+          <!-- <div id="indicator-circle-M3M"></div>
+          <div class="connection-status" id="connection-status-M3M">Не подключено</div> -->
+        </div>
       </form>
     </div>
   </div>
