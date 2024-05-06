@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const berkutModule = require('../module_api/test');
 const snmpModule = require('../module_api/ModuleForSMNPConnection');
 const attModule = require('../module_api/AttTCPModule');
+const m3mModule = require('../module_api/comModule');
 const path = require('path');
 
 const app = express();
@@ -14,10 +15,15 @@ app.use(express.static('/frontend/public'));
 
 //ATT модуль
 app.post('/att/setValue', (req, res) => {
-  const attValue = req.body.value;
-  attModule.setAttenuatorValue(attValue);
-  
-  res.status(200).send(attModule.getAttenuatorValue());
+  try{
+    const attValue = req.body.value;
+    attModule.setAttenuatorValue(attValue);
+    res.status(200).send(attValue);
+  } catch (error) {
+    console.error('Error', error);
+    res.status(500).send('Error occurred');
+  }
+    
 });
 
 app.get('/att/connect', (req, res) => {
@@ -30,9 +36,11 @@ app.get('/att/connect', (req, res) => {
   }
 
 });
+
 app.get('/att/getValue', (req, res) => {
   res.status(200).send(attModule.getAttenuatorValue());
 });
+
 app.get('/att/disconnect', (req, res) => {
   try{
     attModule.destroyATT();
@@ -49,13 +57,33 @@ app.get('/att/disconnect', (req, res) => {
 
 //M3M модуль
 
+app.post('/M3M/setValue', (req, res) =>{
+  const m3mValue = req.body.value;
+  try{
+    m3mModule.setOffset(m3mValue);
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Error', error);
+    res.status(500).send('Error occurred');
+  }
+
+});
+
+app.get('/M3M/connect', (req, res) =>{
+  res.sendStatus(200);
+});
+
+app.get('/M3M/disconnect', (req, res) =>{
+  res.sendStatus(200);
+});
+
 //M3M модуль
 
 //SNMP модуль
 app.post('/snmp/process', (req, res) =>{
   const [freq, mode, width, ipp] = req.body;
-  console.log(req.body)
-  console.log(mode.oid, mode.value);
+  // console.log(req.body)
+  // console.log(mode.oid, mode.value);
   if(ipp)
   {
     snmpModule.getOid(mode.oid);
@@ -92,7 +120,12 @@ try{
 
 app.get('/bert/connect', (req, res) => {
   berkutModule.connectSSH();
-  res.sendStatus(200);
+  try{
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Error', error);
+    res.status(500).send('Error occurred');
+  }
 });
 
 app.get('/bert/disconnect', async (req, res) => {

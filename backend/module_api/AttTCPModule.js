@@ -1,6 +1,6 @@
 const net = require('net');
 let client;
-const output;
+let output;
 
 function connectATT() {
     // Устанавливаем параметры подключения
@@ -34,6 +34,9 @@ function destroyATT() {
 
 function getAttenuatorValue() {
     client.write(':INP:ATT?\n');
+    while (!parseInt(output).toString()){
+        sleep(1000);
+    }
     return parseInt(output).toString();
 }
 
@@ -41,10 +44,17 @@ function setAttenuatorValue(attValue) {
     client.write(`:INP:ATT ${attValue.toString()}\n`);
 }
 
+function sleep(millis) {
+    var t = (new Date()).getTime();
+    var i = 0;
+    while (((new Date()).getTime() - t) < millis) {
+        i++;
+    }
+}
 
-connectATT();
-setAttenuatorValue(25);
-console.log(getAttenuatorValue())
+// connectATT();
+// setAttenuatorValue(25);
+// console.log(getAttenuatorValue())
 // destroyATT();
 
 module.exports = {

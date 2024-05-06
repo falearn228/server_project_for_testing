@@ -13,6 +13,13 @@ var varbinds= //example of structre
     value: 0
 }];
 
+
+function stationIpChange(hostIp, playIp){
+  options.hostTest = hostIp;
+  options.hostPlay = playIp;
+}
+
+
 function oidMaker(whatOid, Value)
 {
   switch(whatOid)
