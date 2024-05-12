@@ -6,6 +6,7 @@ const attModule = require('../module_api/AttTCPModule');
 const m3mModule = require('../module_api/comModule');
 const expressTestModule = require('../module_api/express_test');
 const path = require('path');
+const XLSX = require('xlsx');
 //da
 const app = express();
 const port = 3000;
@@ -68,6 +69,7 @@ app.post('/Test/EXPRESS_TEST', async (req, res) =>{
       14500,
       16500
     ];
+    let excelData = [['Модуляция', 'Bits', 'Ebits', 'Процент ошибок']];
     for(let i = 6; i >= 0; i--){
       await berkutModule.sendCommand(`configure`);
       // const speed = await expressTestModule.getSpeed(i);
@@ -99,11 +101,20 @@ app.post('/Test/EXPRESS_TEST', async (req, res) =>{
           sleep(3000);
         }
         await berkutModule.sendCommand('bert stop');
+        const errorRate = (bits_ebits.ebits / (bits_ebits.ebits + bits_ebits.bits)) * 100;
+        excelData.push([expressTestModule.mod_name[i], bits_ebits.bits, bits_ebits.ebits, errorRate.toFixed(2)]);
       }
       sleep(1000);
     }
     // attModule.setAttenuatorValue(x);
     // snmpModule.monitorSnmpData(i, attModule, x);
+    function writeDataToExcel(data) {
+      const ws = XLSX.utils.aoa_to_sheet(data); // Преобразуем массив данных в лист Excel
+      const wb = XLSX.utils.book_new(); // Создаем новую книгу
+      XLSX.utils.book_append_sheet(wb, ws, 'Результаты'); // Добавляем лист в книгу
+      XLSX.writeFile(wb, 'result_express_test.xlsx'); // Записываем книгу в файл
+    }
+    writeDataToExcel(excelData);
     res.status(200);
   } catch (error) {
     console.error('Error', error);
