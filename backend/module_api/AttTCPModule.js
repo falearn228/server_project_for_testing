@@ -7,6 +7,7 @@ function connectATT() {
     const HOST = '169.254.0.160'; // IP-адрес или хостнейм вашего устройства
     const PORT = 5025; // Порт вашего устройства
     client = new net.Socket();
+
     // Создаем экземпляр сокета TCP
     client.connect(PORT, HOST, function() {
       // Отправляем запрос *IDN? на устройство
@@ -41,7 +42,11 @@ function getAttenuatorValue() {
 }
 
 function setAttenuatorValue(attValue) {
-    client.write(`:INP:ATT ${attValue.toString()}\n`);
+    return new Promise((resolve, reject) => {
+     client.write(`:INP:ATT ${attValue.toString()}\n`);
+     sleep(1500);
+     resolve(1)
+    })
 }
 
 function sleep(millis) {

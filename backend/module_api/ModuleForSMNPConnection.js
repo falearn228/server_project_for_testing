@@ -2,145 +2,94 @@ const snmp = require('net-snmp');
 
 // Настройки для подключения к устройству
 const options = {
-  hostTest: '172.16.17.206',
-  hostPlay: '172.16.17.79'
+  subIp: '172.16.17.84',
+  baseIp: '172.16.17.173'
 };
 
-var varbinds= //example of structre
-[{
-    oid: "",
-    type: snmp.ObjectType.Integer,
-    value: 0
-}];
-
-
-function stationIpChange(hostIp, playIp){
-  options.hostTest = hostIp;
-  options.hostPlay = playIp;
+function setIp(newSub, newBase){
+  options.subIp = newSub;
+  options.baseIp = newBase;
 }
 
+function fetchSnmpData(ip, oid) {
+    return new Promise((resolve, reject) => {
+        const session = snmp.createSession(ip, "public"); // Адаптируйте community string по вашему случаю
 
-function oidMaker(whatOid, Value)
-{
-  switch(whatOid)
-  {
-    case "Frequncy":
-    {
-      varbinds[0].oid="1.3.6.1.4.1.19707.7.7.2.1.4.58.0"
-      varbinds[0].value=Value
-      break
-    }
-    case "Width":
-    {
-      varbinds[0].oid="1.3.6.1.4.1.19707.7.7.2.1.4.56.0"
-      varbinds[0].value=Value
-      break
-    }
-    case "Mode":
-    {
-      varbinds[0].oid="1.3.6.1.4.1.19707.7.7.2.1.4.18.0"
-      varbinds[0].value=Value
-      break
-    }
-    default:
-    {
-      varbinds.oid=""
-      varbinds.value=0
-    }
-  }
+        session.get([oid], (error, varbinds) => {
+            if (error) {
+                reject(error);
+            } else {
+                if (snmp.isVarbindError(varbinds[0])) {
+                    reject(snmp.varbindError(varbinds[0]));
+                } else {
+                    resolve(varbinds[0].value);
+                }
+            }
+            session.close();
+        });
+    });
 }
 
-function setOid(oidToSet, value, isItTestingStation=true)
-{
-  oidMaker(oidToSet, value)
-  if(varbinds.oid=="")
-  {
-    return "Can't set oid. Invalid Oid";
-  }
-  a=""
-  if(isItTestingStation)
-  {
-    a=options.hostTest
-  }
-  else
-  {
-    a=options.hostPlay
-  }  
-  const session = snmp.createSession(a)
+// Асинхронная функция для использования fetchSnmpData
+async function getSnmpData() {
+    const ip = options.subIp; // Ваш IP-адрес
+    const oid = "1.3.6.1.4.1.19707.7.7.2.1.3.9.0"; // Ваш OID
 
-  session.set(varbinds, function (error, varbinds) {
-    if (error) {
-        console.error(error.toString());
-    } else {
-        // Проверяем, были ли переменные установлены успешно
-        for (let i = 0; i < varbinds.length; i++) {
-            if (snmp.isVarbindError(varbinds[i]))
-                console.error(snmp.varbindError(varbinds[i]));
-            else
-                console.log("Установлено: " + varbinds[i].oid + " = " + varbinds[i].value);
-        }
+    try {
+        const snmpData = await fetchSnmpData(ip, oid);
+        console.log("Received value:", snmpData.toString());
+        // Теперь переменная snmpData содержит значение, полученное по SNMP
+        return snmpData.toString();
+    } catch (error) {
+        console.error("Error fetching SNMP ", error);
+        return null; // Возвращаем null в случае ошибки
     }
-    
-    session.close();
-  });
 }
 
-function getOid(oid,isItTestingStation=true)//maybe We need to change it// What if we will need to set many oid in one time
-{
-  switch(oid)
-  {
-    case "Frequncy":
-    {
-      oid="1.3.6.1.4.1.19707.7.7.2.1.4.58.0"
-      break
+async function monitorSnmpData(targetValue, attModule, attValue, ip=options.subIp, oid="1.3.6.1.4.1.19707.7.7.2.1.3.9.0") {
+  return new Promise(async (resolve, reject) => {  
+    let x = await fetchSnmpData(ip, oid);
+    if(x.toString() != targetValue.toString()){
+      console.log(x.toString())
+      console.log(targetValue.toString())
+      attModule.setAttenuatorValue(attValue-2);
+      sleep(2000);
+      attModule.setAttenuatorValue(attValue-1);
+      sleep(2000);
+      attModule.setAttenuatorValue(attValue);
+      sleep(2000);
     }
-    case "Width":
-    {
-      oid="1.3.6.1.4.1.19707.7.7.2.1.4.56.0"
-      break
+    x = await fetchSnmpData(ip, oid);
+    if(x.toString() == targetValue.toString()){
+      resolve(1);
     }
-    case "Mode":
-    {
-      oid="1.3.6.1.4.1.19707.7.7.2.1.4.18.0"
-      break
+    else{
+      resolve(0);
     }
-    default:
-    {
-      return "Can't get oid. Invalid OID"
+  })
+}
+
+// // Пример использования:
+// const oid = "1.3.6.1.4.1.19707.7.7.2.1.3.9.0"; // Замените на ваш OID
+
+// fetchSnmpData(options.subIp, oid)
+//     .then(value => {
+//         console.log("Received value:", value.toString());
+//     })
+//     .catch(error => {
+//         console.error("Error")
+
+// });
+
+function sleep(millis) {
+    var t = (new Date()).getTime();
+    var i = 0;
+    while (((new Date()).getTime() - t) < millis) {
+        i++;
     }
-  }
-  a=""
-  if(isItTestingStation)
-  {
-    a=options.hostTest
-  }
-  else
-  {
-    a=options.hostPlay
-  }  
-  const session = snmp.createSession(a)
-  session.get([oid], function (error, varbinds) {
-    if (error) {
-      console.error('Ошибка при чтении OID:', error);
-    } else {
-      for (const varbind of varbinds) {
-        if (snmp.isVarbindError(varbind)) {
-          console.error('Ошибка в varbind:', varbind);
-        } else {
-          console.log('OID:', varbind.oid);
-          console.log('Значение:', varbind.value.toString());
-          session.close(); 
-          return varbind.value.toString();
-        }
-      }
-    }
-    session.close();
-    return "";
-  });
 }
 
 
 module.exports = {
-  setOid,
-  getOid
+  monitorSnmpData,
 };

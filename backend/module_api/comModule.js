@@ -22,7 +22,7 @@ function readResponse(port) {
     port.on('data', (data) => {
       deviceResponse = parseFloat(data);
       while(!deviceResponse){
-        sleep(1000)
+        sleep(3000)
       }
       resolve(deviceResponse)
     });
@@ -68,6 +68,9 @@ async function getMainValue() {
     console.error('Произошла ошибка:', error.message);
   }
 }
+
+
+
 
 module.exports = {
     setOffset,
