@@ -28,7 +28,7 @@ function closeModalID(ModalID) {
  const BercutConnectionStatus = document.getElementById('BercutConnectionStatus');
  const AttConnectionStatus = document.getElementById('AttConnectionStatus');
  const M3MConnectionStatus = document.getElementById('M3MConnectionStatus');
-
+ const EXPRESS_TEST_press = document.getElementById('EXPRESS_TEST_press');
  const AttTypeConnection = document.getElementById('AttTypeConnection');
  const Attenuation= document.getElementById('Attenuation');
 
@@ -40,51 +40,58 @@ function EXPRESS_TEST() {
     const input_Cable1 = document.getElementById("input_Cable1");
     const input_Cable2 = document.getElementById("input_Cable2");
     const input_Cable3 = document.getElementById("input_Cable3");
+
+    button.addEventListener('click', function() {
+        button.disabled = true; // Отключаем кнопку сразу после клика
+        button.style.opacity = 0.5; // Делаем кнопку прозрачной
+
+        let input_PA1_val = input_PA1.value;
+        let input_PA2_val = input_PA2.value;
+        let input_Splitter_m3m_val = input_Splitter_m3m.value;
+        let input_Splitter_st_val = input_Splitter_st.value;
+        let input_Cable1_val = input_Cable1.value;
+        let input_Cable2_val = input_Cable2.value;
+        let input_Cable3_val = input_Cable3.value;
     
-    let input_PA1_val = input_PA1.value;
-    let input_PA2_val = input_PA2.value;
-    let input_Splitter_m3m_val = input_Splitter_m3m.value;
-    let input_Splitter_st_val = input_Splitter_st.value;
-    let input_Cable1_val = input_Cable1.value;
-    let input_Cable2_val = input_Cable2.value;
-    let input_Cable3_val = input_Cable3.value;
-   
-    let InputedParams = [
-        {
-            device: "Attenuators",
-            pa1: input_PA1_val,
-            pa2: input_PA2_val 
+        let InputedParams = [
+            {
+                device: "Attenuators",
+                pa1: input_PA1_val,
+                pa2: input_PA2_val 
 
-        },
-        {
-            device: "Splitter",
-            v1: input_Splitter_st_val,
-            v2: input_Splitter_m3m_val
-        },
-        {
-            device: "Cable",
-            c1: input_Cable1_val,
-            c2: input_Cable2_val,
-            c3: input_Cable3_val
-        },
-    ]
+            },
+            {
+                device: "Splitter",
+                v1: input_Splitter_st_val,
+                v2: input_Splitter_m3m_val
+            },
+            {
+                device: "Cable",
+                c1: input_Cable1_val,
+                c2: input_Cable2_val,
+                c3: input_Cable3_val
+            },
+        ]
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/Test/EXPRESS_TEST', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Test/EXPRESS_TEST', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
 
-    xhr.onload = function() {
-        if (xhr.status === 200) {
+        xhr.onload = function() {
+            button.disabled = false;
+            button.style.opacity = 1;
+            if (xhr.status === 200) {
+                console.log(xhr.response);
+            } else if (xhr.status >= 400) {
+                console.error("Ошибка запроса: ", xhr.status);
+            }
+        };
+
+        xhr.onerror = function() {
             console.log(xhr.response);
-        } else if (xhr.status >= 400) {
-            console.error("Ошибка запроса: ", xhr.status);
-        }
-    };
-
-    xhr.onerror = function() {
-        console.log(xhr.response);
-    };
-    xhr.send(JSON.stringify(InputedParams));
+        };
+        xhr.send(JSON.stringify(InputedParams));
+    });
 }
 
 function connectAtt() {
