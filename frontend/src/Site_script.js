@@ -1,11 +1,3 @@
-window.onload = function() {
-    var output_BASE_to_M3M = document.getElementById("output_BASE_to_M3M");
-    var output_BASE_to_ABONENT = document.getElementById("output_BASE_to_ABONENT");
-
-    output_BASE_to_M3M.value = "";
-    output_BASE_to_ABONENT.value = "";
-};
-
 function openModalID(ModalID) {
   document.getElementById(ModalID).style.display = "block";
 }
@@ -41,67 +33,48 @@ function closeModalID(ModalID) {
  const Attenuation= document.getElementById('Attenuation');
 
 function EXPRESS_TEST() {
-    const output_EXPRESS_TEST = document.getElementById("output_EXPRESS_TEST");
-
-    const xhr = new XMLHttpRequest();
-
-    const url = `/Test/EXPRESS_TEST`;
-  
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = function () {
-      if (xhr.status >= 200 && xhr.status < 400) {
-        output_EXPRESS_TEST.value = xhr.response + " дБ";
-      } 
-       else {
-          console.error('Ошибка запроса: ', xhr.statusText);
-      }
-    };
-    xhr.onerror = function () {
-      console.error('Ошибка сетевого запроса.');
-    };
-  
-    xhr.send();
-}
-
-function Calculate_attenuation() {
-    const input_SUM_PA = document.getElementById("input_SUM_PA");
-    const input_Splitter = document.getElementById("input_Splitter");
-    const input_Cable = document.getElementById("input_Cable");
-
-    let SUM_PA_value = input_SUM_PA.value;
-    let Splitter_value = input_Splitter.value;
-    let Cable_value = input_Cable.value;
-
-    const output_BASE_to_M3M = document.getElementById("output_BASE_to_M3M");
-    const output_BASE_to_ABONENT = document.getElementById("output_BASE_to_ABONENT");
-
+    const input_PA1 = document.getElementById("input_PA1");
+    const input_PA2 = document.getElementById("input_PA2");
+    const input_Splitter_m3m = document.getElementById("input_Splitter_m3m");
+    const input_Splitter_st = document.getElementById("input_Splitter_st");
+    const input_Cable1 = document.getElementById("input_Cable1");
+    const input_Cable2 = document.getElementById("input_Cable2");
+    const input_Cable3 = document.getElementById("input_Cable3");
+    
+    let input_PA1_val = input_PA1.value;
+    let input_PA2_val = input_PA2.value;
+    let input_Splitter_m3m_val = input_Splitter_m3m.value;
+    let input_Splitter_st_val = input_Splitter_st.value;
+    let input_Cable1_val = input_Cable1.value;
+    let input_Cable2_val = input_Cable2.value;
+    let input_Cable3_val = input_Cable3.value;
+   
     let InputedParams = [
         {
             device: "Attenuators",
-            value: Cable_value
+            pa1: input_PA1_val,
+            pa2: input_PA2_val 
+
         },
         {
             device: "Splitter",
-            value: Splitter_value
+            v1: input_Splitter_st_val,
+            v2: input_Splitter_m3m_val
         },
         {
             device: "Cable",
-            value: SUM_PA_value
-        }
+            c1: input_Cable1_val,
+            c2: input_Cable2_val,
+            c3: input_Cable3_val
+        },
     ]
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/Test/Attenuation', true);
+    xhr.open('POST', '/Test/EXPRESS_TEST', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);   // ОТПРАВЛЯТЬ в таком виде -> res.status(200).json([227, 444]);
-            var value1 = response[0];
-            var value2 = response[1];
-            output_BASE_to_M3M.value = value1; // ПЕРВОЕ И ВТОРОЕ ЗНАЧЕНИЕ ЭТО ПЕРВАЯ И ВТОРАЯ ЛИНИЯ СООТВЕТСТВЕННО.
-            output_BASE_to_ABONENT.value = value2;
             console.log(xhr.response);
         } else if (xhr.status >= 400) {
             console.error("Ошибка запроса: ", xhr.status);
