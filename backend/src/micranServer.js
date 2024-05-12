@@ -4,14 +4,114 @@ const berkutModule = require('../module_api/test');
 const snmpModule = require('../module_api/ModuleForSMNPConnection');
 const attModule = require('../module_api/AttTCPModule');
 const m3mModule = require('../module_api/comModule');
+const expressTestModule = require('../module_api/express_test');
 const path = require('path');
-
+//da
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.json());
 const frontPath = path.join(__dirname + '../../../frontend');
 app.use(express.static('/frontend/public'));
+
+//Express test
+
+// app.post('/Test/Attenuation', async (req, res) =>{
+//   try{
+//     expressTestModule.setValues(
+//       req.body[0].pa1,
+//       req.body[0].pa1,
+//       req.body[1].v1,
+//       req.body[1].v2,
+//       req.body[2].c1,
+//       req.body[2].c2,
+//       req.body[2].c3
+//     );
+//     await berkutModule.sendCommand('bert start');
+//     expressTestModule.setModulation(req.body[3].val);
+//     m3mModule.getMainValue().then(data =>{
+//       expressTestModule.setM3M(data); 
+//       const x = expressTestModule.calcM3M();
+//       const y = expressTestModule.calcBaseAtt();
+//       const z = expressTestModule.calcMainAtt();
+//       berkutModule.sendCommand('bert stop');
+//       res.status(200).json([x, y, z]); 
+//     });
+//   } catch {
+//     console.error('Error', error);
+//     res.status(500).send('Error occurred');
+//   }
+// });
+
+app.post('/Test/EXPRESS_TEST', async (req, res) =>{
+  try{
+    expressTestModule.setValues(
+      req.body[0].pa1,
+      req.body[0].pa1,
+      req.body[1].v1,
+      req.body[1].v2,
+      req.body[2].c1,
+      req.body[2].c2,
+      req.body[2].c3
+    );
+    // const speed = expressTestModule.getSpeed();
+    // console.log(speed);
+    // await berkutModule.sendCommand(`configure; bert rate ${getSpeed()} kbps; exit`);
+    const comp = expressTestModule.calcM3M();
+    m3mModule.setOffset(comp);
+    const speed = [
+      1600,
+      3500,
+      5250,
+      7000,
+      10500,
+      14500,
+      16500
+    ];
+    for(let i = 6; i >= 0; i--){
+      await berkutModule.sendCommand(`configure`);
+      // const speed = await expressTestModule.getSpeed(i);
+      await berkutModule.sendCommand(`bert rate ${speed[i].toString()} kbps`);
+      await berkutModule.sendCommand(`exit`);
+      await berkutModule.sendCommand('bert start');
+      sleep(1000);
+      const m3m = await m3mModule.getMainValue();
+      console.log(m3m)
+      await expressTestModule.setM3M(m3m);
+      const modAtt = await expressTestModule.calcMainAtt(i);
+      console.log(modAtt+6)
+      await berkutModule.sendCommand('bert stop');
+
+      // const modAtt = await expressTestModule.getMainModulations(i);
+      await attModule.setAttenuatorValue(modAtt+6);
+      sleep(1000);
+      const result = await snmpModule.monitorSnmpData(i, attModule, modAtt + 6);
+      if(result){
+        await berkutModule.sendCommand('bert start');
+        let bits_ebits;
+        for (let i = 0; i < 5; i++) {
+          await berkutModule.sendCommand('show bert trial');
+          sleep(1000)
+          const output = berkutModule.getOutput();
+          bits_ebits = await expressTestModule.parseBits(output);
+          sleep(2000)
+          console.log('bits_Ebits: ',bits_ebits.bits, bits_ebits.ebits);
+          sleep(3000);
+        }
+        await berkutModule.sendCommand('bert stop');
+      }
+      sleep(1000);
+    }
+    // attModule.setAttenuatorValue(x);
+    // snmpModule.monitorSnmpData(i, attModule, x);
+    res.status(200);
+  } catch (error) {
+    console.error('Error', error);
+    res.status(500).send('Error occurred');
+  }
+});
+
+//Express test
 
 //ATT модуль
 app.post('/att/setValue', (req, res) => {
@@ -106,7 +206,6 @@ app.post('/snmp/process', (req, res) =>{
 //Беркут модуль
 app.post('/bert/process', async (req, res) => {
   const command = req.body.command;
-  console.log(command)
 try{
   await berkutModule.sendCommand(command);
   const output = berkutModule.getOutput();
@@ -121,6 +220,7 @@ try{
 app.get('/bert/connect', (req, res) => {
   berkutModule.connectSSH();
   try{
+
     res.sendStatus(200);
   } catch (error) {
     console.error('Error', error);
@@ -239,3 +339,12 @@ app.get("/scriptIMPROVED.js", (req, res) =>{
 app.listen(port, () => {
      console.log(`Server is running on http://localhost:${port}`);
 });
+
+
+function sleep(millis) {
+    var t = (new Date()).getTime();
+    var i = 0;
+    while (((new Date()).getTime() - t) < millis) {
+        i++;
+    }
+}
