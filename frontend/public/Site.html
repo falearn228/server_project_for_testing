@@ -178,30 +178,61 @@
       <h2>Введите данные для расчета затухания в линии</h2>
       <form>
         <div class="form-group">
-          <label for="input_SUM_PA">Аттенюаторы ПА1, ПА2:</label>
-          <input type="text" id="input_SUM_PA" class="labels" placeholder="Введите затухание, дБ" autofocus>
+          <label for="input_SUM_PA">Аттенюатор ПА1:</label>
+          <input type="text" id="input_PA1" class="labels" placeholder="Введите затухание, дБ" autofocus>
+
+          <label for="input_SUM_PA">Аттенюатор ПА2:</label>
+          <input type="text" id="input_PA2" class="labels" placeholder="Введите затухание, дБ" autofocus>
+
           <!-- ЧЕЛОВЕК ВВОДИТ СУММУ АТТЕНЮАТОРОВ НА СТАНЦИЯХ, А НЕ ОДНО ЗНАЧЕНИЕ -->
-          <label for ="input_Splitter">Разветвитель:</label>
-          <input type="text" id="input_Splitter" class="labels" placeholder="Введите затухание, дБ">
-          <label for ="input_Cable">Кабель:</label>
-          <input type="text" id="input_Cable" class="labels" placeholder="Введите затухание, дБ">
+          <label for ="input_Splitter_m3m">Разветвитель на М3М:</label>
+          <input type="text" id="input_Splitter_m3m" class="labels" placeholder="Введите затухание, дБ">
+
+          <label for ="input_Splitter_st">Разветвитель прямо:</label>
+          <input type="text" id="input_Splitter_st" class="labels" placeholder="Введите затухание, дБ">
+
+          <label for ="input_Cable1">Кабель 1:</label>
+          <input type="text" id="input_Cable1" class="labels" placeholder="Введите затухание, дБ">
+
+          <label for ="input_Cable2">Кабель 2:</label>
+          <input type="text" id="input_Cable2" class="labels" placeholder="Введите затухание, дБ">
+
+          <label for ="input_Cable3">Кабель 3:</label>
+          <input type="text" id="input_Cable3" class="labels" placeholder="Введите затухание, дБ">
+
           <!-- КАК Я ПОНИМАЮ, ВРОДЕ НУЖНО СКЛАДЫВАТЬ КАБЕЛЬ НЕСКОЛЬКО РАЗ
           ПРИМЕР = ПА1 + КАБЕЛЬ + РАЗВЕТВИТЕЛЬ + КАБЕЛЬ + М3М. ЧЕЛОВЕК ВВОДИТ
           ЛИШЬ НОМИНАЛ КАБЕЛЯ.-->
         </div>
-        <div class="form-group">
-          <label for="output_BASE_to_M3M"><strong>Затухание от БАЗЫ до M3M</strong>:</label>
+        <!-- <div class="form-group">
+          <label for="output_BASE_to_M3M"><strong>Затухание от станции до М3М</strong>:</label>
           <input type="text" id="output_BASE_to_M3M" readonly>
         </div>
+                      <select id="selectionModul">
+                  <option value=6>bpska 1/2</option>
+                  <option value=5>qbpska 2/3</option>
+                  <option value=4>qbpska 3/4</option>
+                  <option value=3>16Qam 1/2</option>
+                  <option value=2>16Qam 3/4</option>
+                  <option value=1>64Qam 2/3</option>
+                  <option value=0>64Qam 3/4</option>
+                   ЗДЕСЬ ПЕРЕПИСАТЬ И ДОПИСАТЬ НУЖНЫЕ МОДУЛЯЦИИ 
+                  ПРОСТО CRTL+C и CTRL+V. В JS скрипте все уже работает.
+                  Значения value изменить на нужные OID'ы
+              </select>
         <div class="form-group">
-          <label for="output_BASE_to_ABONENT"><strong>Затухание от БАЗЫ до АБОНЕНТА</strong>:</label>
+          <label for="output_BASE_to_ABONENT"><strong>Затухание между станциями</strong>:</label>
           <input type="text" id="output_BASE_to_ABONENT" readonly>
         </div>
         <div class="form-group">
           <label for="output_EXPRESS_TEST"><strong>Вычисленное затухание для АТ</strong>:</label>
           <input type="text" id="output_EXPRESS_TEST" readonly>
         </div>
-          <button type="button" class="btn btn-primary" id="Calculate" onclick="Calculate_attenuation()">Вычислить</button>
+        <div class="form-group">
+          <label for="output_EXPRESS_TEST_REAL"><strong>Процент ошибок</strong>:</label>
+          <input type="text" id="output_EXPRESS_TEST_REAL" readonly>
+        </div>
+          <button type="button" class="btn btn-primary" id="Calculate" onclick="Calculate_attenuation()">Вычислить</button> -->
           <div class="Center-Express-Test">
             <button type="button" class="btn btn-success" id="EXPRESS_TEST_press" onclick="EXPRESS_TEST()">Экспресс тест</button>
           </div>
@@ -214,7 +245,7 @@
       <h2>Введите данные</h2>
       <form>
         <label for="inputField">Команда:</label>
-        <input type="text" id="inputField"><br>
+        <input type="text" id="inputFieldBercut"><br>
         <div class="buttons-wrap">
           <button type="button" class="btn btn-primary" id="connectButtonBercut" onclick="connectBercut()">Подключиться</button>
           <button type="button" class="btn btn-success " id="pressButtonBercut" onclick="sendCommandToBackend(); closeModalID('Bercut');">Отправить</button>
@@ -278,9 +309,13 @@
         <div class="form-group">
           <label for="selectionModulation">Выберите модуляцию:
               <select id="selectionModulation">
-                  <option value="0">qbpska 1/2</option>
+                  <option value="0">bpska 1/2</option>
                   <option value="1">qbpska 2/3</option>
-                  <option value="2">qbpska 3/3</option>
+                  <option value="2">qbpska 3/4</option>
+                  <option value="3">16Qam 1/2</option>
+                  <option value="4">16Qam 3/4</option>
+                  <option value="5">64Qam 2/3</option>
+                  <option value="6">64Qam 3/4</option>
                   <!-- ЗДЕСЬ ПЕРЕПИСАТЬ И ДОПИСАТЬ НУЖНЫЕ МОДУЛЯЦИИ 
                   ПРОСТО CRTL+C и CTRL+V. В JS скрипте все уже работает.
                   Значения value изменить на нужные OID'ы-->
