@@ -178,19 +178,23 @@
       <h2>Введите данные для расчета затухания в линии</h2>
       <form>
         <div class="form-group">
+          <div class="inputs_PA">
           <label for="input_SUM_PA">Аттенюатор ПА1:</label>
           <input type="text" id="input_PA1" class="labels" placeholder="Введите затухание, дБ" autofocus>
 
           <label for="input_SUM_PA">Аттенюатор ПА2:</label>
           <input type="text" id="input_PA2" class="labels" placeholder="Введите затухание, дБ" autofocus>
+          </div>
 
+          <div class="inputs_M3M">
           <!-- ЧЕЛОВЕК ВВОДИТ СУММУ АТТЕНЮАТОРОВ НА СТАНЦИЯХ, А НЕ ОДНО ЗНАЧЕНИЕ -->
           <label for ="input_Splitter_m3m">Разветвитель на М3М:</label>
           <input type="text" id="input_Splitter_m3m" class="labels" placeholder="Введите затухание, дБ">
-
           <label for ="input_Splitter_st">Разветвитель прямо:</label>
           <input type="text" id="input_Splitter_st" class="labels" placeholder="Введите затухание, дБ">
+          </div>
 
+          <div class="inputs_Cabels">
           <label for ="input_Cable1">Кабель 1:</label>
           <input type="text" id="input_Cable1" class="labels" placeholder="Введите затухание, дБ">
 
@@ -199,7 +203,7 @@
 
           <label for ="input_Cable3">Кабель 3:</label>
           <input type="text" id="input_Cable3" class="labels" placeholder="Введите затухание, дБ">
-
+          </div>
           <!-- КАК Я ПОНИМАЮ, ВРОДЕ НУЖНО СКЛАДЫВАТЬ КАБЕЛЬ НЕСКОЛЬКО РАЗ
           ПРИМЕР = ПА1 + КАБЕЛЬ + РАЗВЕТВИТЕЛЬ + КАБЕЛЬ + М3М. ЧЕЛОВЕК ВВОДИТ
           ЛИШЬ НОМИНАЛ КАБЕЛЯ.-->
