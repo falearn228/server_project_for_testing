@@ -210,6 +210,15 @@ td {
   text-decoration: none;
 }
 
+.inputs_PA, .inputs_M3M, .inputs_Cabels {
+  margin-top: 10px;
+}
+
+#EXPRESS_TEST_press:disabled {
+  opacity: 0.5; /* Делаем кнопку прозрачной */
+  cursor: not-allowed; /* Изменяем курсор на "запрещено" */
+}
+
 .content {
   margin-left: 12%;
 }
