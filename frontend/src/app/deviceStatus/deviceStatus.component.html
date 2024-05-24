@@ -1,0 +1,69 @@
+<div class="overflow-y-auto h-90">
+<div class="Bercut-content mt-2 max-w-lg mx-0 p-4 border rounded-lg shadow-md mb-6">
+  <h2 class="text-xl font-semibold mb-4">Беркут-ЕТ</h2>
+  <form>
+    <div class="buttons-wrap flex space-x-2">
+      <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold text-sm py-1 px-2 rounded" id="connectButtonBercut" (click)="connectBer()">Подключиться</button>
+      <button style="display: none;" type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold text-sm py-1 px-2 rounded" id="disconnectButtonBercut" (click)="disconnectBer()">Отключиться</button>
+    </div>
+  </form>
+</div>
+
+<div class="Bercut-content max-w-lg mx-0 p-4 border rounded-lg shadow-md mb-6">
+  <h2 class="text-xl font-semibold mb-4">Аттенюатор</h2>
+  <form>
+    <div class="buttons-wrap flex space-x-2">
+      <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold text-sm py-1 px-2 rounded" id="connectButtonAtt" (click)="connectAtt()">Подключиться</button>
+      <button style="display: none;" type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold text-sm py-1 px-2 rounded" id="disconnectButtonAtt" (click)="disconnectAtt()">Отключиться</button>
+    </div>
+  </form>
+</div>
+
+<div class="Bercut-content max-w-lg mx-0 p-4 border rounded-lg shadow-md mb-6">
+  <h2 class="text-xl font-semibold mb-4">Параметры станций</h2>
+  <form (ngSubmit)="sendOID()">
+    <div class="space-y-4">
+      <div class="form-group">
+        <label for="inputFrequency" class="font-bold block mb-1">Частота станций, КГц:</label>
+        <input type="text" id="inputFrequency" [(ngModel)]="inputFrequency" placeholder="Введите частоту" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" autofocus>
+      </div>
+      <div class="form-group">
+        <label for="selectionBandwidth" class="font-bold block mb-1">Ширина полосы:</label>
+        <select id="selectionBandwidth" [(ngModel)]="selectionBandwidth" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="3">10 МГц</option>
+          <option value="5">20 МГц</option>
+        </select>
+        <div class="buttons-wrap mt-4">
+          <button type="button" class="bg-green-500 hover:bg-green-700 text-white font-bold text-sm py-1 px-2 rounded" id="sendOID" (click)="sendOID()">Отправить</button>
+        </div>
+      </div>
+    </div>
+    </form>
+    <h2 class="text-xl font-semibold mb-4">IP адреса станций</h2>
+    <form (ngSubmit)="sendIP()">
+    <div class="form-group">
+      <label for="inputIP-BASE" class="font-bold block mb-1">IP адрес <strong>Базы</strong>:</label>
+      <input type="text" class="mb-3 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" id="inputIP-BASE" placeholder="XXX.XXX.XXX.XXX" maxlength="15" autofocus>
+      <label for="inputIP-ABONENT" class="font-bold block mb-1">IP адрес <strong>Абонента</strong>:</label>
+      <input type="text" class="mb-3 w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" id="inputIP-ABONENT" placeholder="XXX.XXX.XXX.XXX" maxlength="15">
+    </div>
+    <div class="buttons-wrap flex space-x-2">
+      <button type="button" class="bg-green-500 hover:bg-green-700 text-white font-bold text-sm py-1 px-2 rounded" id="sendIP" (click)="sendIP()">Отправить</button>
+      <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold text-sm py-1 px-2 rounded" id="swapMode" (click)="swapMode()">Сменить роли</button>
+    </div>
+  </form>
+</div>
+
+<div id="M3M" class="Bercut-content max-w-lg mx-0 p-4 border rounded-lg shadow-md mb-6"> 
+  <h2 class="text-xl font-semibold mb-4">Измеритель мощности</h2>
+  <form>
+    <div class="form-group">
+      <label for="inputOffset" class="font-bold block mb-1">Компенсация осблаения, дБ:</label>
+      <input type="text" id="inputOffset" placeholder="Введите компенсацию ослабления" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+    <div class="buttons-wrap mt-4">
+      <button type="button" class="bg-green-500 hover:bg-green-700 text-white font-bold text-sm py-1 px-2 rounded" id="sendOID" (click)="sendM3M()">Отправить</button>
+    </div>
+  </form>
+</div>
+</div>

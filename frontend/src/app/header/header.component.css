@@ -1,0 +1,9 @@
+header {
+    background-color: White;
+    padding: 6px;
+}
+
+.logo img {
+    height: 50px;
+    vertical-align: middle;
+}

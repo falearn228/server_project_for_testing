@@ -1,0 +1,29 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 62px;
+  bottom: 0;
+}
+
+.active-link {
+  background-color: #4A5568; /* Или любой цвет, который вам нравится */
+  color: #fff; /* Или любой другой цвет текста */
+}
+/*
+.sidebar a {
+  color: #fff;
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+.sidebar a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+.sidebar li {
+  margin-bottom: 40px;
+}*/
